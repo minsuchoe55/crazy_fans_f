@@ -116,7 +116,8 @@ export default {
     })
 
     const goToHome = async () => {
-      await router.push('/')
+      // await router.push('/')
+      window.location.reload()
       store.dispatch('resetFilter')
     }
 
@@ -279,6 +280,11 @@ header {
     width: 100%;
     padding-right: 3.5rem;  /* 닫기 버튼 공간 확보 */
   }
+
+  .search-results {
+    width: 114%;
+  }
+ 
 }
 
 /* 모바일 환경 (768px 미만) */
@@ -297,6 +303,10 @@ header {
   .search-wrapper {
     width: 92%;     /* 모바일에서 좌우 여백 줄임 */
     margin-top: 80px;  /* 상단 여백 조정 */
+  }
+
+   .search-results {
+    width: 101%;
   }
 }
 
