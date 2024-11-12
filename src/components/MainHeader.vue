@@ -160,6 +160,18 @@ export default {
         event.preventDefault()
         if (showResults.value && selectedIndex.value > -1) {
           selectedIndex.value = Math.max(selectedIndex.value - 1, -1)
+          nextTick(() => {
+            const selectedElement = document.querySelector('.profile-item.selected')
+            if (selectedElement) {
+              selectedElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+            } else if (selectedIndex.value === -1) {
+              // 선택된 항목이 없을 때 스크롤을 맨 위로
+              const resultsContainer = document.querySelector('.search-results')
+              if (resultsContainer) {
+                resultsContainer.scrollTop = 0
+              }
+            }
+          })
         }
       } else if (event.key === 'Enter') {
         if (selectedIndex.value > -1) {
