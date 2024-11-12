@@ -5,7 +5,8 @@ export default createStore({
     loading: false,
     profile: null,
     video: null,
-    filter_video:null,
+    filter_video: null,
+    selectedProfileIndex: null,
     error: null
   },
 
@@ -14,7 +15,7 @@ export default createStore({
     getProfile: state => state.profile,
     getVideo: state => state.video,
     getError: state => state.error,
-
+    getSelectedProfileIndex: state => state.selectedProfileIndex
   },
 
   mutations: {
@@ -32,6 +33,9 @@ export default createStore({
     },
     SET_FILTER_VIDEO(state, data) {
       state.filter_video = data
+    },
+    SET_SELECTED_PROFILE_INDEX(state, index) {
+      state.selectedProfileIndex = index
     }
   },
 
@@ -62,24 +66,17 @@ export default createStore({
         commit('SET_LOADING', false)
       }
     },
-    filterVideoData({ commit, state }, searchTerm) {
+    findSearch({ commit, state }, searchTerm) {
       commit('SET_LOADING', true)
       try {
         const videos = state.video
-        let filteredVideos
-
-        // user로 검색하는 경우
-        if (typeof searchTerm === 'string' && !searchTerm.startsWith('#')) {
-          filteredVideos = videos.filter(video => video.user === searchTerm)
-        } 
-        // 해시태그로 검색하는 경우
-        else {
-          const searchHash = searchTerm.startsWith('#') ? searchTerm : `#${searchTerm}`
-          filteredVideos = videos.filter(video => {
-            const searchTags = video.search.split(' ')
-            return searchTags.some(tag => tag.toLowerCase().includes(searchHash.toLowerCase()))
-          })
-        }
+        const searchHash = searchTerm.startsWith('#') ? searchTerm : `#${searchTerm}`
+        const filteredVideos = videos.filter(video => {
+          const searchTags = video.search.split(' ')
+          return searchTags.some(tag => 
+            tag.toLowerCase().includes(searchHash.toLowerCase())
+          )
+        })
         
         commit('SET_FILTER_VIDEO', filteredVideos)
       } catch (error) {
@@ -88,8 +85,57 @@ export default createStore({
         commit('SET_LOADING', false)
       }
     },
+    findUser({ commit, state }, username) {
+      commit('SET_LOADING', true)
+      try {
+        const videos = state.video
+        const profile = state.profile.find(p => p.user === username)
+        
+        if (profile) {
+          let filteredVideos = videos.filter(video => video.user === username)
+          const profileIndex = state.profile.findIndex(p => p.user === username)
+          commit('SET_SELECTED_PROFILE_INDEX', profileIndex)
+          commit('SET_FILTER_VIDEO', filteredVideos)
+        } else {
+          commit('SET_SELECTED_PROFILE_INDEX', null)
+          commit('SET_FILTER_VIDEO', []) // 해당 사용자가 없을 경우 빈 배열
+        }
+      } catch (error) {
+        commit('SET_ERROR', error.message)
+        commit('SET_SELECTED_PROFILE_INDEX', null)
+      } finally {
+        commit('SET_LOADING', false)
+      }
+    },
+    filterVideoData({ dispatch }, searchTerm) {
+      if (searchTerm.startsWith('@')) {
+        const username = searchTerm.substring(1)
+        dispatch('findUser', username)
+      } else {
+        dispatch('findSearch', searchTerm)
+      }
+    },
+    selectProfile({ commit, dispatch, state }, slide) {
+      if (!slide) {
+        commit('SET_SELECTED_PROFILE_INDEX', null)
+        commit('SET_FILTER_VIDEO', null)
+        return
+      }
+
+      const profileIndex = state.profile.findIndex(p => p.user === slide.user)
+      
+      if (state.selectedProfileIndex === profileIndex) {
+        commit('SET_SELECTED_PROFILE_INDEX', null)
+        commit('SET_FILTER_VIDEO', null)
+        return
+      }
+
+      commit('SET_SELECTED_PROFILE_INDEX', profileIndex)
+      dispatch('filterVideoData', "@" + slide.user)
+    },
     resetFilter({ commit }) {
       commit('SET_FILTER_VIDEO', null)
+      commit('SET_SELECTED_PROFILE_INDEX', null)
     }
   }
 })

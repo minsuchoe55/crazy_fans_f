@@ -2,7 +2,7 @@
   <div>
     <!-- 데이터가 없을 경우 표시할 메시지 -->
     <div v-if="!paginatedVideos.length" class="no-data">
-      데이터를 불러오는 중입니다...
+      데이터가 없습니다...
     </div>
 
     <!-- 기존 템플릿 -->
@@ -155,9 +155,23 @@ export default {
     })
 
     const handleProfileClick = (video) => {
-      if (!video) return
-      store.dispatch('filterVideoData', video.user)
+      if (!video) {
+        store.dispatch('resetFilter')
+        return
+      }
+
+      const profileIndex = store.state.profile.findIndex(p => p.user === video.user)
+      if (store.state.selectedProfileIndex === profileIndex) {
+        store.dispatch('resetFilter')
+      } else {
+        store.dispatch('findUser', video.user)
+      }
     }
+
+    // videos watch 추가
+    watch(() => videos.value, () => {
+      currentPage.value = 1  // videos가 변경될 때마다 첫 페이지로 초기화
+    })
 
     return {
       store,

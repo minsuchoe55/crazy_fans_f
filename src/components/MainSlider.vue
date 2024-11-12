@@ -21,16 +21,25 @@
       <div class="slide-content">
         <div 
           class="profile-image" 
-          :class="{ 'selected': selectedProfile === slide.user }"
+          :class="{ 'selected': store.state.selectedProfileIndex === index }"
           :style="{ backgroundImage: `url(${cdnUrl + slide.thumb})` }"
-          @click="handleProfileClick(slide)"
+          @click="() => store.dispatch('selectProfile', slide)"
         ></div>
-         <span class="profile-name" @click="handleProfileClick(slide)">{{ slide.nick }}</span>
+         <span 
+          class="profile-name" 
+          @click="() => store.dispatch('selectProfile', slide)"
+        >
+          {{ slide.nick }}
+        </span>
       </div>
     </swiper-slide>
   </swiper>
   <!-- 필터 리셋 버튼 -->
-  <div v-if="store.state.filter_video" class="reset-filter" @click="handleProfileClick(null)">
+  <div 
+    v-if="store.state.filter_video" 
+    class="reset-filter" 
+    @click="() => store.dispatch('selectProfile', null)"
+  >
     전체보기
   </div>
 </template>
@@ -53,30 +62,6 @@ export default {
   setup() {
     const store = useStore()
     const cdnUrl = import.meta.env.VITE_CDN_URL
-    const selectedProfile = ref(null)
-
-    const handleProfileClick = (slide) => {
-      if (!slide) {
-        selectedProfile.value = null
-        store.dispatch('resetFilter')
-        return
-      }
-      
-      if (selectedProfile.value === slide.user) {
-        selectedProfile.value = null
-        store.dispatch('resetFilter')
-        return
-      }
-      
-      selectedProfile.value = slide.user
-      store.dispatch('filterVideoData', slide.user)
-    }
-
-    watch(() => store.state.filter_video, (newValue) => {
-      if (!newValue) {
-        selectedProfile.value = null
-      }
-    })
 
     // 반응형 breakpoints 설정
     const breakpoints = {
@@ -94,22 +79,12 @@ export default {
       }
     }
 
-    // store에서 데이터 가져오기
-    const profileData = computed(() => store.state.profile)
-    const loading = computed(() => store.state.loading)
-    const error = computed(() => store.state.error)
-
     return {
       store,
       cdnUrl,
       breakpoints,
       Navigation,
-      Pagination,
-      profileData,
-      loading,
-      error,
-      selectedProfile,
-      handleProfileClick
+      Pagination
     }
   }
 }
