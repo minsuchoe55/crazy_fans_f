@@ -214,7 +214,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem 2.5rem;
+  /* padding: 1.2rem 2.5rem; */
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
   width: 100%;
