@@ -6,8 +6,8 @@
         <!-- 썸네일 -->
         <div v-if="selectVideo !== data.id" class="video-wrapper">
           <img :src="`${CDN_URL}/thumb/${data.thumb}`" class="video-thumb" />
-          <div @click="selectVideo = data.id" class="video-button">
-            <img src="@/assets/play.svg" class="video-play" />
+          <div @click="selectVideo = data.id" class="video-play-button-wrapper">
+            <img src="@/assets/play.svg" class="video-play-button" />
           </div>
         </div>
         <!-- 썸네일 -->
@@ -44,7 +44,7 @@
       <div
         @click="scrollTo('-')"
         class="pagination-button"
-        :class="{ disabled: currentPage === 1 }"
+        :class="{ disable: currentPage === 1 }"
       >
         이전
       </div>
@@ -60,7 +60,7 @@
       <div
         @click="scrollTo('+')"
         class="pagination-button"
-        :class="{ disabled: currentPage === totalPage }"
+        :class="{ disable: currentPage === totalPage }"
       >
         다음
       </div>
@@ -97,6 +97,7 @@ const totalPage = computed(() => {
   return Math.ceil(props.VIDEO.length / perPage);
 });
 const pages = computed(() => {
+  // 5개 노출
   let start =
     currentPage.value % 10 === 5
       ? Math.floor(currentPage.value / 5) * 5 - 4
@@ -156,11 +157,11 @@ watch(
 /* 비디오 */
 .grid-wrapper {
   border-radius: 8px;
-  background-color: rgba(40, 40, 40, 0.9);
+  background-color: var(--sub-background-color);
 }
 .video-wrapper {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9; /* 비율 고정 */
   overflow: hidden;
 }
 .video-thumb {
@@ -169,7 +170,7 @@ watch(
   border-radius: 8px 8px 0px 0px;
   object-fit: cover;
 }
-.video-button {
+.video-play-button-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -178,11 +179,11 @@ watch(
   height: 45px;
   border-radius: 50%;
   opacity: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--video-background-color);
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.video-play {
+.video-play-button {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -190,11 +191,13 @@ watch(
   width: 36px;
   height: 36px;
 }
-.video-wrapper:hover .video-button {
-  opacity: 1;
+@media (hover: hover) {
+  .video-wrapper:hover .video-play-button-wrapper {
+    opacity: 1;
+  }
 }
 @media (hover: none) {
-  .video-button {
+  .video-play-button-wrapper {
     opacity: 1;
   }
 }
@@ -202,16 +205,16 @@ watch(
 /* 데이터 */
 .meta-wrapper {
   display: flex;
-  padding: 8px;
+  padding: 8px 8px 8px 8px;
 }
 .meta-thumb {
   width: 50px;
-  height: 50px;
+  height: 50px; /* 높이 고정 */
   border-radius: 50%;
   border: 2px solid transparent;
   margin-right: 8px;
   transition: all 0.3s ease;
-  box-sizing: border-box;
+  box-sizing: border-box; /* 헤더 동일, 데이터와 맞춤 */
   cursor: pointer;
 }
 @media (hover: hover) {
@@ -222,12 +225,12 @@ watch(
 }
 .meta-data {
   height: 50px;
-  line-height: 1;
+  line-height: 1; /* 높이 고정 */
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
+  box-sizing: border-box; /* 썸네일과 맞춤 */
 }
 .meta-user {
-  color: #fff;
+  color: var(--first-font-color);
   font-size: 14px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -236,7 +239,7 @@ watch(
 }
 .meta-nick {
   display: inline-block;
-  color: #888;
+  color: var(--second-font-color);
   font-size: 12px;
   margin-right: 8px;
   overflow: hidden;
@@ -245,7 +248,7 @@ watch(
 }
 .meta-hash {
   display: inline-block;
-  color: #888;
+  color: var(--second-font-color);
   font-size: 12px;
   overflow: hidden;
   white-space: nowrap;
@@ -253,7 +256,7 @@ watch(
 }
 .meta-date {
   display: inline-block;
-  color: #666;
+  color: var(--third-font-color);
   font-size: 12px;
   margin-right: 8px;
   overflow: hidden;
@@ -262,7 +265,7 @@ watch(
 }
 .meta-time {
   display: inline-block;
-  color: #666;
+  color: var(--third-font-color);
   font-size: 12px;
   overflow: hidden;
   white-space: nowrap;
@@ -273,37 +276,37 @@ watch(
 .pagination {
   display: flex;
   justify-content: center;
-  padding: 48px 0px 48px 0px;
+  padding: 48px 0px 48px 0px; /* 결과와 맞춤 */
 }
 .pagination-button {
   padding: 8px 16px 8px 16px;
   border-radius: 8px;
-  background-color: rgba(40, 40, 40, 0.9);
-  color: #fff;
+  background-color: var(--main-background-color);
+  color: var(--first-font-color);
   font-size: 14px;
   transition: all 0.3s ease;
   margin: 0px 4px 0px 4px;
   cursor: pointer;
 }
-.pagination-button.disabled {
+.pagination-button.disable {
   opacity: 0.65;
   pointer-events: none;
 }
 .pagination-button.select {
-  background-color: #888;
+  background-color: var(--second-font-color);
   pointer-events: none;
 }
 @media (hover: hover) {
-  .pagination-button:hover:not(.disabled, .select) {
-    background-color: #888;
+  .pagination-button:hover:not(.disable, .select) {
+    background-color: var(--second-font-color);
   }
 }
 
-/* 비디오 없음 */
+/* 결과 */
 .no-search {
   text-align: center;
-  color: #666;
+  color: var(--third-font-color);
   font-size: 16px;
-  padding: 48px 0px 48px 0px;
+  padding: 48px 0px 48px 0px; /* 페이지와 맞춤 */
 }
 </style>
