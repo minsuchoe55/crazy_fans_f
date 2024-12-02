@@ -1,44 +1,47 @@
 <template>
+  <!-- 플레이어 -->
   <media-player
-    load="visible"
-    poster-load="visible"
     view-type="video"
     stream-type="on-demand"
-    storage="storage"
-    src="https://fansonly.b-cdn.net/ads/LbfKWghLeQCmgzxQ.mp4"
+    :src="ads"
     playsInline
   >
-    <media-poster
-      :src="props.video.thumb"
-      alt=""
-      class="vds-poster"
-    ></media-poster>
     <media-provider> </media-provider>
     <media-video-layout> </media-video-layout>
   </media-player>
+  <!-- 플레이어 -->
 </template>
 
-
 <script setup>
-import { ref, onMounted } from "vue"
+import { computed, onMounted } from "vue";
 import "vidstack/bundle";
 
+// 프롭스
 const props = defineProps({
-  video: Object
+  video: Object,
+  ADS: Object,
 });
 
-const cdnUrl = import.meta.env.VITE_CDN_URL
+// 글로벌
+const CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const videoPlay = () => {
+// 광고
+const ads = computed(() => {
+  return `${CDN_URL}/ads/${
+    props.ADS[Math.floor(Math.random() * props.ADS.length)].src
+  }`;
+});
+
+// 플레이
+const play = () => {
   const player = document.querySelector("media-player");
 
-  // 이벤트 구독
   player.subscribe(({ canPlay, ended, source }) => {
     // 영상 재생
     if (canPlay === true && ended === false) {
       player.play();
 
-      // 슬라이더 숨김
+      // 광고 고정
       const slider = document.querySelector("media-time-slider");
       if (source.src.includes(".net/ads/")) {
         slider.disabled = true;
@@ -48,26 +51,24 @@ const videoPlay = () => {
     }
 
     // 영상 교체
-    if (ended === true) {
-      if (source.src.includes(".net/ads/")) {
-        localStorage.removeItem("https://fansonly.b-cdn.net/ads/LbfKWghLeQCmgzxQ.mp4:0:0")
-        player.src = `${cdnUrl}${props.video.src}`;
-      } else {
-        player.src = "https://fansonly.b-cdn.net/ads/LbfKWghLeQCmgzxQ.mp4";
-      }
+    if (ended === true && source.src.includes(".net/ads/")) {
+      player.src = `${CDN_URL}/video/${props.video.video}`;
     }
   });
 };
 
-onMounted(()=>{
-  videoPlay()
-})
+// 라이프사이클
+onMounted(() => {
+  play();
+});
 </script>
 
 <style>
+/* 플레이어 */
 media-menu-button,
 media-pip-button,
-media-google-cast-button {
+media-google-cast-button,
+media-spinner {
   display: none !important;
 }
 </style>

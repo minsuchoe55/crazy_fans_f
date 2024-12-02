@@ -1,119 +1,63 @@
 <template>
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-links">
-        <a href="#" class="footer-link">
-          <img 
-            src="/telegram.svg" 
-            alt="telegram"
-            class="telegram-icon"
-            />
-          crazyfans
-        </a>
-        <span class="divider">|</span>
-        <a href="#" class="footer-link">우회주소 : crazyfans.io</a>
-      </div>
-      <div class="copyright">
-        &copy; 2024 Fans. All rights reserved.
+  <div class="footer-container">
+    <div class="footer-wrapper">
+      <a :href="`${CONTACT_URL}`" class="footer-link">
+        {{ `텔레그램 ${CONTACT_NAME}` }}</a
+      >
+      <!-- <img src="@/assets/telegram.svg" class="footer-icon" /> -->
+      <span class="footer-divider">|</span>
+      <a :href="`${SITE_URL}`" class="footer-link">{{
+        `우회주소 ${SITE_NAME}`
+      }}</a>
+
+      <div class="footer-copyright">
+        &copy; 2024 CrazyFans. All rights reserved.
       </div>
     </div>
-  </footer>
+  </div>
 </template>
 
-<script>
-export default {
-  name: 'MainFooter'
-}
+<script setup>
+const CONTACT_NAME = import.meta.env.VITE_CONTACT_NAME;
+const CONTACT_URL = import.meta.env.VITE_CONTACT_URL;
+const SITE_NAME = import.meta.env.VITE_SITE_NAME;
+const SITE_URL = import.meta.env.VITE_SITE_URL;
 </script>
 
 <style scoped>
-.footer {
-  border-top: 1px solid #333;
-  padding: 20px 0;
-  margin-top: 50px;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.footer-container {
   text-align: center;
+  padding: 16px 0px 16px 0px;
+  margin: 0px 16px 0px 16px;
+  border-top: 1px solid #666;
 }
-
-.footer-links {
-  margin-bottom: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.footer-wrapper {
+  height: 14px;
+  line-height: 1; /* 높이 고정 */
 }
-
 .footer-link {
-  color: #999;
-  text-decoration: none;
+  color: #888;
   font-size: 14px;
-  transition: color 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  height: 20px;
-  line-height: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
-
-.telegram-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-  transition: transform 0.2s ease;
-  vertical-align: middle;
-}
-
-.footer-link:hover .telegram-icon {
-  transform: scale(1.1);
-}
-
 .footer-link:hover {
   color: #fff;
 }
-
-.divider {
-  color: #666;
-  margin: 0 15px;
+/* .footer-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: sub;
+} */
+.footer-divider {
+  color: #888;
   font-size: 14px;
-  height: 20px;
-  line-height: 20px;
+  margin: 0px 8px 0px 8px;
 }
-
-.copyright {
+.footer-copyright {
   color: #666;
   font-size: 12px;
-  margin-top: 10px;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 480px) {
-  .footer {
-    padding: 15px 0;
-  }
-
-  .footer-link {
-    font-size: 12px;
-    height: 18px;
-    line-height: 18px;
-  }
-
-  .telegram-icon {
-    width: 14px;
-    height: 14px;
-  }
-
-  .divider {
-    margin: 0 10px;
-    font-size: 12px;
-    height: 18px;
-    line-height: 18px;
-  }
-
-  .copyright {
-    font-size: 11px;
-  }
+  margin-top: 16px;
 }
 </style>
