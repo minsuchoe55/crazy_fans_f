@@ -87,7 +87,13 @@ const searchOpen = async () => {
 
   if (isSearchOpen.value) {
     await nextTick();
-    searchOpenRef.value.focus();
+    searchOpenRef.value.focus(); // 포커스 이동
+
+    document.body.style.overflow = "hidden"; // 배경 스크롤 방지(데스크탑)
+    document.body.style.touchAction = "none"; // 배경 스크롤 방지(모바일)
+  } else {
+    document.body.style.overflow = "auto"; // 배경 스크롤 방지 해제(데스크탑)
+    document.body.style.touchAction = "auto"; // 배경 스크롤 방지 해제(모바일)
   }
 };
 
@@ -235,7 +241,7 @@ const prevent = (event) => {
 
 /* 검색 */
 .search-container {
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -303,7 +309,7 @@ const prevent = (event) => {
 
 /* 결과 노출 */
 .search-result-wrapper {
-  max-height: 514px; /* 7개 노출 1 + 8 + (64 + 8) * 6 + 64 + 8 + 1  + */
+  max-height: 442px; /* 6개 노출 1 + 8 + (64 + 8) * 5 + 64 + 8 + 1  + */
   overflow-y: auto;
   padding: 8px 16px 8px 16px;
   border: 1px solid var(--main-border-color);
@@ -311,6 +317,11 @@ const prevent = (event) => {
   background-color: var(--sub-background-color);
   margin-top: 8px;
   box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .search-result-wrapper {
+    max-height: 370px; /* 5개 노출 1 + 8 + (64 + 8) * 5 + 64 + 8 + 1  + */
+  }
 }
 .search-result {
   display: flex;

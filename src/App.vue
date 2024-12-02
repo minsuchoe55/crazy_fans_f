@@ -24,6 +24,9 @@ body {
 }
 
 /* 플레이어 */
+video {
+  aspect-ratio: 16 / 9;
+}
 media-menu-button,
 media-pip-button,
 media-google-cast-button {
