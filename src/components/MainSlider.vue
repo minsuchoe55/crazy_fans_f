@@ -2,9 +2,9 @@
   <!-- 슬라이드 -->
   <swiper
     :modules="[FreeMode]"
+    :free-mode="true"
     :slidesPerView="slidesPerView"
     :space-between="4"
-    :free-mode="true"
   >
     <swiper-slide
       @click="emit('search', data.user, true)"
@@ -46,10 +46,6 @@ const CDN_URL = import.meta.env.VITE_CDN_URL;
 
 // 검색
 const actor = computed(() => {
-  if (window.clientWidth) {
-    console.log(window.clientWidth);
-  }
-
   return props.ACTOR;
 });
 
@@ -58,12 +54,12 @@ const selectActor = computed(() => {
   return props.selectActor;
 });
 
-// 반응형
+// 감시
 const swiperRef = ref(null);
 const slidesPerView = ref(null);
 const resizeObserver = new ResizeObserver((entries) => {
   for (let entry of entries) {
-    slidesPerView.value = Math.floor(entry.contentRect.width / 50);
+    slidesPerView.value = entry.contentRect.width / 54; // 50 + 4
   }
 });
 
@@ -98,8 +94,9 @@ onBeforeUnmount(() => {
 }
 .actor-user {
   width: 50px;
+  line-height: 10px; /* 높이 고정 */
   text-align: center;
-  color: #fff;
+  color: var(--first-font-color);
   font-size: 10px;
   margin-top: 4px;
   overflow: hidden;
@@ -108,17 +105,19 @@ onBeforeUnmount(() => {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.actor-wrapper:hover .actor-thumb {
-  transform: scale(1.2);
+@media (hover: hover) {
+  .actor-wrapper:hover .actor-thumb {
+    border-color: #ff0000;
+    transform: scale(1.2);
+  }
+  .actor-wrapper:hover .actor-user {
+    color: #ff0000;
+  }
 }
-.actor-wrapper:hover .actor-thumb,
-.actor-wrapper:hover .actor-user {
-  color: #ff0000;
+.actor-wrapper.selectActor .actor-thumb {
   border-color: #ff0000;
 }
-.actor-wrapper.selectActor .actor-thumb,
 .actor-wrapper.selectActor .actor-user {
   color: #ff0000;
-  border-color: #ff0000;
 }
 </style>

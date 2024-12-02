@@ -1,15 +1,20 @@
 <template>
   <!-- 헤더 -->
   <div class="header-container">
-    <img @click="refresh()" src="@/assets/logo.png" class="header-logo" />
-    <img @click="searchOpen()" src="@/assets/search.svg" class="header-icon" />
+    <img @click="refresh()" src="@/assets/logo.png" class="header-logo-icon" />
+    <img
+      @click="searchOpen()"
+      src="@/assets/search.svg"
+      class="header-search-icon"
+    />
   </div>
   <!-- 헤더 -->
 
   <!-- 검색 -->
-  <div v-if="isSearchOpen" class="search-overlay">
-    <div class="search-front">
-      <!-- 검색 -->
+  <div v-if="isSearchOpen" class="search-container">
+    <!-- 검색 구역 -->
+    <div class="search-front-wrapper">
+      <!-- 검색 노출-->
       <div class="search-input-wrapper">
         <input
           ref="searchOpenRef"
@@ -20,12 +25,12 @@
         <img
           @click="searchOpen()"
           src="@/assets/close.svg"
-          class="search-close"
+          class="search-input-close-icon"
         />
       </div>
-      <!-- 검색 -->
+      <!-- 검색 노출 -->
 
-      <!-- 결과 -->
+      <!-- 결과 노출 -->
       <div v-if="actor.length" class="search-result-wrapper">
         <div
           @click="search(data.user, true, null)"
@@ -34,17 +39,21 @@
           class="search-result"
           :class="{ selectIndex: selectIndex === index }"
         >
-          <img :src="`${CDN_URL}/actor/${data.actor}`" class="actor-thumb" />
-          <span class="actor-user">{{ data.user }}</span>
-          <span class="actor-nick">{{ data.nick }}</span>
+          <img
+            :src="`${CDN_URL}/actor/${data.actor}`"
+            class="search-result-actor-thumb"
+          />
+          <span class="search-result-actor-user">{{ data.user }}</span>
+          <span class="search-result-actor-nick">{{ data.nick }}</span>
         </div>
       </div>
-      <!-- 결과 -->
+      <!-- 결과 노출 -->
     </div>
+    <!-- 검색 구역 -->
 
-    <!-- 배경 -->
-    <div class="search-back" @click="searchOpen()"></div>
-    <!-- 배경 -->
+    <!-- 배경 구역 -->
+    <div class="search-back-wrapper" @click="searchOpen()"></div>
+    <!-- 배경 구역 -->
   </div>
   <!-- 검색 -->
 </template>
@@ -68,7 +77,7 @@ const refresh = () => {
   window.location.href = "/";
 };
 
-// 모달
+// 검색
 const isSearchOpen = ref(false);
 const searchOpenRef = ref(null);
 const searchOpen = async () => {
@@ -135,8 +144,9 @@ const select = (keyword, key) => {
       nextTick(() => {
         const selectedElement = document.querySelector(".selectIndex");
         if (selectedElement) {
+          // 배경 스크롤 방지
           selectedElement.scrollIntoView({
-            block: "center",
+            block: "nearest",
             behavior: "smooth",
           });
         }
@@ -151,8 +161,9 @@ const select = (keyword, key) => {
       nextTick(() => {
         const selectedElement = document.querySelector(".selectIndex");
         if (selectedElement) {
+          // 배경 스크롤 방지
           selectedElement.scrollIntoView({
-            block: "center",
+            block: "nearest",
             behavior: "smooth",
           });
         }
@@ -186,6 +197,7 @@ const select = (keyword, key) => {
 
 // 기타
 const prevent = (event) => {
+  // 포커스 이동 방지
   if (event.key === "ArrowDown" || event.key === "ArrowUp") {
     event.preventDefault();
   }
@@ -200,73 +212,79 @@ const prevent = (event) => {
   align-items: center;
   padding: 8px 16px 8px 16px;
 }
-.header-logo {
+.header-logo-icon {
   width: 80px;
   height: 48px; /* 5:3 비율 */
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.header-logo:hover {
+.header-logo-icon:hover {
   opacity: 0.8;
 }
-.header-icon {
+.header-search-icon {
   width: 20px;
   height: 20px;
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.header-icon:hover {
-  transform: scale(1.2);
+@media (hover: hover) {
+  .header-search-icon:hover {
+    transform: scale(1.2);
+  }
 }
 
-/* 모달 */
-.search-overlay {
-  position: fixed;
+/* 검색 */
+.search-container {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
 }
-.search-front {
-  width: 90%;
-  max-width: 620px; /* 5:3 비율 */
-  margin-top: 152px;
+
+/* 검색 구역 */
+.search-front-wrapper {
+  width: 90%; /* 모바일 */
+  max-width: 640px; /* 데스크탑 */
+  margin-top: 152px; /* 위에서부터 64 + 80 + 8 */
   z-index: 1000;
 }
 @media (max-width: 768px) {
-  .search-front {
-    margin-top: 64px;
+  .search-front-wrapper {
+    margin-top: 64px; /* 위에서부터 64 */
   }
 }
-.search-back {
+
+/* 배경 구역 */
+.search-back-wrapper {
   position: fixed;
+  background-color: var(--main-background-color);
   inset: 0;
   z-index: 999;
 }
 
-/* 검색 */
+/* 검색 노출 */
 .search-input-wrapper {
   position: relative;
 }
 .search-input {
   width: 100%;
-  line-height: 20px;
-  padding: 21px 32px 21px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 20px; /* 높이 고정 */
+  padding: 21px 56px 21px 16px; /* 높이 1 + 21 + 20 + 21 + 1, 좌우 16 + 40 */
+  border: 1px solid var(--main-border-color);
   border-radius: 8px;
-  color: #fff;
+  color: var(--first-font-color);
   font-size: 16px;
-  background-color: rgba(40, 40, 40, 0.9);
+  background-color: var(--sub-background-color);
   transition: all 0.3s ease;
   box-sizing: border-box;
 }
 .search-input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--main-border-hover-color);
 }
-.search-close {
+.search-input-close-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -277,23 +295,23 @@ const prevent = (event) => {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.search-close:hover {
-  transform: translateY(-50%) scale(1.2);
+@media (hover: hover) {
+  .search-input-close-icon:hover {
+    transform: translateY(-50%) scale(1.2);
+  }
 }
 
-/* 결과 */
+/* 결과 노출 */
 .search-result-wrapper {
-  max-height: 730px;
+  max-height: 514px; /* 7개 노출 1 + 8 + (64 + 8) * 6 + 64 + 8 + 1  + */
   overflow-y: auto;
   padding: 8px 16px 8px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--main-border-color);
   border-radius: 8px;
-  background-color: rgba(40, 40, 40, 0.9);
+  background-color: var(--sub-background-color);
   margin-top: 8px;
   box-sizing: border-box;
 }
-
-/* 배우 */
 .search-result {
   display: flex;
   align-items: center;
@@ -306,23 +324,27 @@ const prevent = (event) => {
 .search-result:last-child {
   margin-bottom: 0px;
 }
-.search-result:hover,
-.search-result.selectIndex {
-  background-color: rgba(255, 255, 255, 0.2);
+@media (hover: hover) {
+  .search-result:hover {
+    background-color: var(--main-border-hover-color);
+  }
 }
-.actor-thumb {
+.search-result.selectIndex {
+  background-color: var(--main-border-hover-color);
+}
+.search-result-actor-thumb {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   margin-right: 8px;
 }
-.actor-user {
-  color: #fff;
+.search-result-actor-user {
+  color: var(--first-font-color);
   font-size: 16px;
   margin-right: 8px;
 }
-.actor-nick {
-  color: #888;
+.search-result-actor-nick {
+  color: var(--second-font-color);
   font-size: 16px;
 }
 
@@ -334,10 +356,10 @@ const prevent = (event) => {
   background-color: transparent;
 }
 .search-result-wrapper::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--main-border-color);
   border-radius: 8px;
 }
 .search-result-wrapper::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--main-border-hover-color);
 }
 </style>

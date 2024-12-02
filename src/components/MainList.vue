@@ -214,9 +214,11 @@ watch(
   box-sizing: border-box;
   cursor: pointer;
 }
-.meta-thumb:hover {
-  transform: scale(1.2);
-  border-color: #ff0000;
+@media (hover: hover) {
+  .meta-thumb:hover {
+    transform: scale(1.2);
+    border-color: #ff0000;
+  }
 }
 .meta-data {
   height: 50px;
@@ -291,8 +293,10 @@ watch(
   background-color: #888;
   pointer-events: none;
 }
-.pagination-button:hover:not(.disabled, .select) {
-  background-color: #888;
+@media (hover: hover) {
+  .pagination-button:hover:not(.disabled, .select) {
+    background-color: #888;
+  }
 }
 
 /* 비디오 없음 */

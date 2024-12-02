@@ -25,6 +25,11 @@ const props = defineProps({
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
+// 비디오
+const video = computed(() => {
+  return props.video.video;
+});
+
 // 광고
 const ads = computed(() => {
   return `${CDN_URL}/ads/${
@@ -35,24 +40,39 @@ const ads = computed(() => {
 // 플레이
 const play = () => {
   const player = document.querySelector("media-player");
+  const button = document.querySelector("media-play-button");
+  const slider = document.querySelector("media-time-slider");
 
-  player.subscribe(({ canPlay, ended, source }) => {
-    // 영상 재생
+  player.subscribe(({ canLoad, canPlay, ended, source }) => {
+    // 로드
+    if (
+      canLoad === true &&
+      ended === false &&
+      !source.src.includes(".net/ads/")
+    ) {
+      // 비디오 로드 시 플레이 버튼 숨김
+      button.style.visibility = "hidden";
+    }
+
+    // 재생
     if (canPlay === true && ended === false) {
       player.play();
 
-      // 광고 고정
-      const slider = document.querySelector("media-time-slider");
       if (source.src.includes(".net/ads/")) {
+        // 광고 재생 시 슬라이더 고정
         slider.disabled = true;
       } else {
+        // 비디오 재생 시 슬라이더 고정 해제
         slider.disabled = false;
+        // 비디오 재생 시 플레이 버튼 숨김 해제
+        button.style.visibility = "visible";
       }
     }
 
-    // 영상 교체
+    // 종료
     if (ended === true && source.src.includes(".net/ads/")) {
-      player.src = `${CDN_URL}/video/${props.video.video}`;
+      // 광고 종료 시 비디오로 소스 교체
+      player.src = `${CDN_URL}/video/${video.value}`;
     }
   });
 };
@@ -63,12 +83,4 @@ onMounted(() => {
 });
 </script>
 
-<style>
-/* 플레이어 */
-media-menu-button,
-media-pip-button,
-media-google-cast-button,
-media-spinner {
-  display: none !important;
-}
-</style>
+<style scoped></style>
