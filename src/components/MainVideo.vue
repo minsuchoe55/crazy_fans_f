@@ -58,14 +58,14 @@ const play = () => {
     if (canPlay === true && ended === false) {
       player.play();
 
-      // 비디오 재생 시 플레이 버튼 숨김 해제
-      button.style.visibility = "visible";
-
-      // 비디오 재생 시 슬라이더 고정 해제
-      slider.disabled = false;
       if (source.src.includes(".net/ads/")) {
         // 광고 재생 시 슬라이더 고정
         slider.disabled = true;
+      } else {
+        // 비디오 재생 시 슬라이더 고정 해제
+        slider.disabled = false;
+        // 비디오 재생 시 플레이 버튼 숨김 해제
+        button.style.visibility = "visible";
       }
     }
 

@@ -99,7 +99,7 @@ const totalPage = computed(() => {
 const pages = computed(() => {
   // 5개 노출
   let start =
-    currentPage.value % 10 === 5
+    currentPage.value % 5 === 0
       ? Math.floor(currentPage.value / 5) * 5 - 4
       : Math.floor(currentPage.value / 5) * 5 + 1;
   let end = Math.min(start + 4, totalPage.value);
@@ -281,7 +281,7 @@ watch(
 .pagination-button {
   padding: 8px 16px 8px 16px;
   border-radius: 8px;
-  background-color: var(--main-background-color);
+  background-color: var(--sub-background-color);
   color: var(--first-font-color);
   font-size: 14px;
   transition: all 0.3s ease;
