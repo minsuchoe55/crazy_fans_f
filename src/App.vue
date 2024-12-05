@@ -27,9 +27,17 @@ body {
 }
 
 /* 플레이어 */
-video {
-  aspect-ratio: 16 / 9; /* 비율 고정 */
-  overflow: hidden;
+@media (hover: hover) {
+  video {
+    aspect-ratio: 16 / 9; /* 비율 고정 */
+    overflow: hidden;
+  }
+}
+@media (hover: none) {
+  video {
+    aspect-ratio: 9 / 16; /* 비율 고정 */
+    overflow: hidden;
+  }
 }
 media-menu-button,
 media-pip-button,

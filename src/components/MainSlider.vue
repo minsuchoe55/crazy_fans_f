@@ -74,6 +74,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* 슬라이드 */
 .swiper {
   height: 64px;
   padding: 8px 16px 8px 16px;

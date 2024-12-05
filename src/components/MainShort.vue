@@ -6,6 +6,7 @@
     virtual
     :direction="'vertical'"
     @slideChange="slideChange"
+    :slidesPerView="1"
   >
     <swiper-slide
       v-for="(data, index) in props.VIDEO"
@@ -51,12 +52,13 @@ const props = defineProps({
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
 // 플레이
-const slideChange = (event) => {
+const slideChange = async (event) => {
   const players = document.querySelectorAll("media-player");
 
   if (players.length === 2) {
     if (event.previousIndex < event.activeIndex) {
       players[0].pause();
+      await new Promise((resolve) => setTimeout(resolve, 500));
       players[1].play();
     } else if (event.previousIndex > event.activeIndex) {
       players[1].pause();
@@ -67,6 +69,7 @@ const slideChange = (event) => {
   } else {
     if (event.previousIndex < event.activeIndex) {
       players[1].pause();
+      await new Promise((resolve) => setTimeout(resolve, 500));
       players[2].play();
     } else if (event.previousIndex > event.activeIndex) {
       players[1].pause();
@@ -97,16 +100,15 @@ const vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty("--vh", `${vh}px`);
 </script>
 
-<style>
+<style scoped>
+/* 슬라이드 */
 .swiper {
   height: calc(var(--vh, 1vh) * 100 - 64px);
 }
+
+/* 플레이어 */
 media-player {
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 64px);
-}
-video {
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 64px);
+  aspect-ratio: 9 / 16; /* 비율 고정 */
+  overflow: hidden;
 }
 </style>

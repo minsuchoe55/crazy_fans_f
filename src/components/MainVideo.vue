@@ -59,10 +59,10 @@ const play = () => {
       player.play();
 
       if (source.src.includes(".net/ads/")) {
-        // 광고 재생 시 슬라이더 고정
+        // 광고 재생 시 슬라이드 고정
         slider.disabled = true;
       } else {
-        // 비디오 재생 시 슬라이더 고정 해제
+        // 비디오 재생 시 슬라이드 고정 해제
         slider.disabled = false;
         // 비디오 재생 시 플레이 버튼 숨김 해제
         button.style.visibility = "visible";
