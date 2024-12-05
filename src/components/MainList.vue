@@ -162,7 +162,6 @@ watch(
 .video-wrapper {
   position: relative;
   aspect-ratio: 16 / 9; /* 비율 고정 */
-  overflow: hidden;
 }
 .video-thumb {
   width: 100%;

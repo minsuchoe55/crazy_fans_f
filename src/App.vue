@@ -27,15 +27,11 @@ body {
 }
 
 /* 플레이어 */
-@media (pointer: fine) {
-  video {
-    aspect-ratio: 16 / 9; /* 비율 고정 */
-  }
+.grid-container video {
+  aspect-ratio: 16 / 9; /* 비율 고정 */
 }
-@media (pointer: coarse) {
-  video {
-    aspect-ratio: 9 / 16; /* 비율 고정 */
-  }
+.swiper-wrapper video {
+  aspect-ratio: 9 / 16; /* 비율 고정 */
 }
 media-menu-button,
 media-pip-button,

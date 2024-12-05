@@ -358,7 +358,7 @@ const prevent = (event) => {
 .search-result:last-child {
   margin-bottom: 0px;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .search-result:hover {
     background-color: var(--main-border-hover-color);
   }
