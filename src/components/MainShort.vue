@@ -5,7 +5,6 @@
     virtual
     :direction="'vertical'"
     @slideChange="slideChange"
-    :slidesPerView="1"
   >
     <swiper-slide
       v-for="(data, index) in props.VIDEO"
