@@ -30,8 +30,15 @@ body {
 .grid-container video {
   aspect-ratio: 16 / 9; /* 비율 고정 */
 }
-.swiper-wrapper video {
-  aspect-ratio: 9 / 16; /* 비율 고정 */
+@media (pointer: fine) {
+  .swiper-wrapper video {
+    aspect-ratio: 16 / 9; /* 비율 고정 */
+  }
+}
+@media (pointer: coarse) {
+  .swiper-wrapper video {
+    aspect-ratio: 9 / 16; /* 비율 고정 */
+  }
 }
 media-menu-button,
 media-pip-button,
