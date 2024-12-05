@@ -79,7 +79,6 @@ const slideChange = async (event) => {
 };
 
 // 검색 넣기
-// 자동 재생
 // 광고 넣기
 
 // id: data.id,
@@ -99,26 +98,18 @@ document.documentElement.style.setProperty("--vh", `${vh}px`);
 </script>
 
 <style scoped>
+/* 플레이어 */
 @media (pointer: fine) {
-  /* 슬라이드 */
   .swiper {
     height: calc(100vh - 64px);
   }
-
-  /* 플레이어 */
-  media-player {
-    aspect-ratio: 16 / 9; /* 비율 고정 */
-  }
 }
 @media (pointer: coarse) {
-  /* 슬라이드 */
   .swiper {
     height: calc(var(--vh, 1vh) * 100 - 64px);
   }
-
-  /* 플레이어 */
-  media-player {
-    aspect-ratio: 9 / 16; /* 비율 고정 */
+  .swiper media-player {
+    height: calc(var(--vh, 1vh) * 100 - 64px); /* 가로 대응 */
   }
 }
 </style>

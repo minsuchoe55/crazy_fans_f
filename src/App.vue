@@ -38,6 +38,7 @@ body {
 @media (pointer: coarse) {
   .swiper-wrapper video {
     aspect-ratio: 9 / 16; /* 비율 고정 */
+    height: 100%; /* 가로 대응 */
   }
 }
 media-menu-button,
