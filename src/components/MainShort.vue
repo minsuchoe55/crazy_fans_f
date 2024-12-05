@@ -1,6 +1,5 @@
 <template>
   <!-- 슬라이드 -->
-  <!-- :slidesPerView="1" -->
   <swiper
     :modules="[Virtual]"
     virtual
@@ -109,6 +108,5 @@ document.documentElement.style.setProperty("--vh", `${vh}px`);
 /* 플레이어 */
 media-player {
   aspect-ratio: 9 / 16; /* 비율 고정 */
-  overflow: hidden;
 }
 </style>

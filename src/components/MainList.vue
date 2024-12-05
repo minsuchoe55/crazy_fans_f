@@ -191,12 +191,12 @@ watch(
   width: 36px;
   height: 36px;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .video-wrapper:hover .video-play-button-wrapper {
     opacity: 1;
   }
 }
-@media (hover: none) {
+@media (pointer: coarse) {
   .video-play-button-wrapper {
     opacity: 1;
   }
@@ -217,7 +217,7 @@ watch(
   box-sizing: border-box; /* 헤더 동일, 데이터와 맞춤 */
   cursor: pointer;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .meta-thumb:hover {
     transform: scale(1.2);
     border-color: #ff0000;
@@ -296,7 +296,7 @@ watch(
   background-color: var(--second-font-color);
   pointer-events: none;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .pagination-button:hover:not(.disable, .select) {
     background-color: var(--second-font-color);
   }

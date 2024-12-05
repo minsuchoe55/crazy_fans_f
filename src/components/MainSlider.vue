@@ -106,7 +106,7 @@ onBeforeUnmount(() => {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .actor-wrapper:hover .actor-thumb {
     border-color: #ff0000;
     transform: scale(1.2);

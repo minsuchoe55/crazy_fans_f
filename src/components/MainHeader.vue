@@ -255,7 +255,7 @@ const prevent = (event) => {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .header-search-icon:hover,
   .header-short-icon:hover {
     transform: scale(1.2);
@@ -324,7 +324,7 @@ const prevent = (event) => {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .search-input-close-icon:hover {
     transform: translateY(-50%) scale(1.2);
   }

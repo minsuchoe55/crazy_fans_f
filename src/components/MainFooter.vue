@@ -51,7 +51,7 @@ const SITE_URL = import.meta.env.VITE_SITE_URL;
   text-decoration: none;
   transition: all 0.3s ease;
 }
-@media (hover: hover) {
+@media (pointer: fine) {
   .footer-link:hover {
     color: var(--first-font-color);
   }
