@@ -1,12 +1,22 @@
 <template>
-  <MainHeader :ACTOR="ACTOR" @search="search"></MainHeader>
-  <MainSlider
-    :ACTOR="ACTOR"
-    :selectActor="selectActor"
+  <MainHeader :ACTOR="ACTOR" @search="search" @short="short"></MainHeader>
+
+  <MainShort
+    v-if="isShort"
+    :VIDEO="VIDEO"
+    :ADS="ADS"
     @search="search"
-  ></MainSlider>
-  <MainList :VIDEO="VIDEO" :ADS="ADS" @search="search"></MainList>
-  <MainFooter></MainFooter>
+  ></MainShort>
+
+  <div v-else>
+    <MainSlider
+      :ACTOR="ACTOR"
+      :selectActor="selectActor"
+      @search="search"
+    ></MainSlider>
+    <MainList :VIDEO="VIDEO" :ADS="ADS" @search="search"></MainList>
+    <MainFooter></MainFooter>
+  </div>
 </template>
 
 <script setup>
@@ -15,6 +25,7 @@ import MainHeader from "@/components/MainHeader.vue";
 import MainSlider from "@/components/MainSlider.vue";
 import MainList from "@/components/MainList.vue";
 import MainFooter from "@/components/MainFooter.vue";
+import MainShort from "@/components/MainShort.vue";
 
 // JSON
 const VIDEO = ref(null);
@@ -52,6 +63,12 @@ const search = (keyword, isActor) => {
     VIDEO.value = [...VIDEO_BACKUP.value];
     selectActor.value = "전체 보기";
   }
+};
+
+// 쇼츠
+const isShort = ref(false);
+const short = () => {
+  isShort.value = !isShort.value;
 };
 
 // 초기화

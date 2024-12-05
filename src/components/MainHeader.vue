@@ -2,11 +2,18 @@
   <!-- 헤더 -->
   <div class="header-container">
     <img @click="refresh()" src="@/assets/logo.png" class="header-logo-icon" />
-    <img
-      @click="searchOpen()"
-      src="@/assets/search.svg"
-      class="header-search-icon"
-    />
+    <div>
+      <img
+        @click="searchOpen()"
+        src="@/assets/search.svg"
+        class="header-search-icon"
+      />
+      <img
+        @click="emit('short')"
+        src="@/assets/short.svg"
+        class="header-short-icon"
+      />
+    </div>
   </div>
   <!-- 헤더 -->
 
@@ -67,7 +74,7 @@ const props = defineProps({
 });
 
 // 이벤트
-const emit = defineEmits(["search"]);
+const emit = defineEmits(["search", "short"]);
 
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -113,6 +120,7 @@ const search = (keyword, isActor, key) => {
         return data.user === keyword;
       });
       emit("search", keyword, true);
+      emit("short");
       searchOpen();
     }
 
@@ -182,6 +190,7 @@ const select = (keyword, key) => {
     // 선택 있음
     if (selectIndex.value > -1) {
       emit("search", actor.value[selectIndex.value].user, true);
+      emit("short");
     }
 
     // 선택 없음
@@ -189,11 +198,13 @@ const select = (keyword, key) => {
       // 1명
       if (actor.value.length === 1) {
         emit("search", actor.value[selectIndex.value].user, true);
+        emit("short");
       }
 
       // 1명 초과
       else {
         emit("search", keyword, false);
+        emit("short");
       }
     }
 
@@ -213,10 +224,14 @@ const prevent = (event) => {
 <style scoped>
 /* 헤더 */
 .header-container {
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px 8px 16px;
+  background-color: #000;
+  z-index: 999;
 }
 .header-logo-icon {
   width: 80px;
@@ -230,11 +245,19 @@ const prevent = (event) => {
 .header-search-icon {
   width: 20px;
   height: 20px;
+  margin-right: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.header-short-icon {
+  width: 22px;
+  height: 22px;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 @media (hover: hover) {
-  .header-search-icon:hover {
+  .header-search-icon:hover,
+  .header-short-icon:hover {
     transform: scale(1.2);
   }
 }
