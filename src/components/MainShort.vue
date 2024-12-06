@@ -141,6 +141,7 @@ const video = computed(() => {
       const random = Math.floor(Math.random() * props.ADS.length);
 
       acc.push({
+        partner: props.ADS[random].partner,
         video: props.ADS[random].video,
         href: props.ADS[random].href,
       });
