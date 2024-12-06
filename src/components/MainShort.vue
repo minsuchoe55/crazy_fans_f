@@ -28,7 +28,7 @@
         <media-provider>
           <div
             v-if="data.id"
-            @click="
+            @touchend="
               emit('search', data.user, true);
               emit('short');
             "
