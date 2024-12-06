@@ -108,7 +108,7 @@ const slideChange = async (event) => {
   }
 
   // 광고
-  if (event.activeIndex % 10 === 0) {
+  if (event.activeIndex > 0 && event.activeIndex % 10 === 0) {
     // 광고 재생 시 슬라이드 고정
     event.allowTouchMove = false;
     event.allowSlideNext = false;
