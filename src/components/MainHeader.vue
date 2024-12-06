@@ -26,7 +26,7 @@
         <input
           ref="searchOpenRef"
           @keydown="prevent($event)"
-          @keyup="search($event.target.value, false, $event.key)"
+          @keyup="search($event.target.value, $event.key)"
           class="search-input"
         />
         <img
@@ -40,7 +40,10 @@
       <!-- 결과 노출 -->
       <div v-if="actor.length" class="search-result-wrapper">
         <div
-          @click="search(data.user, true, null)"
+          @click="
+            emit('search', data.user, true);
+            emit('short');
+          "
           v-for="(data, index) in actor"
           :key="index"
           class="search-result"
@@ -111,26 +114,13 @@ const actor_backup = computed(() => {
     return data.user !== "전체 보기";
   });
 });
-const search = (keyword, isActor, key) => {
+const search = (keyword, key) => {
   // 검색어 있음
   if (keyword) {
-    // 선택 있음
-    if (isActor) {
-      actor.value = [...actor_backup.value].filter((data) => {
-        return data.user === keyword;
-      });
-      emit("search", keyword, true);
-      emit("short");
-      searchOpen();
-    }
-
-    // 선택 없음
-    else {
-      actor.value = [...actor_backup.value].filter((data) => {
-        return data.user?.includes(keyword) || data.nick?.includes(keyword);
-      });
-      select(keyword, key);
-    }
+    actor.value = [...actor_backup.value].filter((data) => {
+      return data.user?.includes(keyword) || data.nick?.includes(keyword);
+    });
+    select(keyword, key);
   }
 
   // 검색어 없음

@@ -32,20 +32,23 @@
               emit('search', data.user, true);
               emit('short');
             "
-            class="actor-wrapper"
+            class="overlay-wrapper"
           >
-            <img :src="`${CDN_URL}/actor/${data.actor}`" class="actor-thumb" />
-            <span class="actor-user">
+            <img
+              :src="`${CDN_URL}/actor/${data.actor}`"
+              class="overlay-actor-thumb"
+            />
+            <span class="overlay-actor-user">
               {{ data.user }}
             </span>
           </div>
-          <div v-else class="actor-wrapper">
+          <div v-else class="overlay-wrapper">
             <a :href="data.href" target="_blank"
               ><img
                 :src="`${CDN_URL}/actor/${data.actor}`"
-                class="actor-thumb"
+                class="overlay-actor-thumb"
               />
-              <span class="actor-user">
+              <span class="overlay-actor-user">
                 {{ data.partner }}
               </span></a
             >
@@ -138,7 +141,7 @@ const video = computed(() => {
       const random = Math.floor(Math.random() * props.ADS.length);
 
       acc.push({
-        video: props.ADS[random].src,
+        video: props.ADS[random].video,
         href: props.ADS[random].href,
       });
     }
@@ -156,7 +159,7 @@ document.documentElement.style.setProperty(
 
 <style scoped>
 /* 오버레이 */
-.actor-wrapper {
+.overlay-wrapper {
   position: absolute;
   display: flex;
   align-items: center;
@@ -164,7 +167,7 @@ document.documentElement.style.setProperty(
   bottom: 10%;
   z-index: 999;
 }
-.actor-thumb {
+.overlay-actor-thumb {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -173,7 +176,7 @@ document.documentElement.style.setProperty(
   box-sizing: border-box;
   cursor: pointer;
 }
-.actor-user {
+.overlay-actor-user {
   color: var(--first-font-color);
   font-size: 16px;
   margin-left: 8px;
@@ -184,11 +187,11 @@ document.documentElement.style.setProperty(
   cursor: pointer;
 }
 @media (pointer: fine) {
-  .actor-wrapper:hover .actor-thumb {
+  .overlay-wrapper:hover .overlay-actor-thumb {
     border-color: #ff0000;
     transform: scale(1.2);
   }
-  .actor-wrapper:hover .actor-user {
+  .overlay-wrapper:hover .overlay-actor-user {
     color: #ff0000;
   }
 }

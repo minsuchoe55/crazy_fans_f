@@ -33,7 +33,7 @@ const video = computed(() => {
 // 광고
 const ads = computed(() => {
   return `${CDN_URL}/ads/${
-    props.ADS[Math.floor(Math.random() * props.ADS.length)].src
+    props.ADS[Math.floor(Math.random() * props.ADS.length)].video
   }`;
 });
 
