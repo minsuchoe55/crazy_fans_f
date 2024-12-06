@@ -6,6 +6,7 @@
     :VIDEO="VIDEO"
     :ADS="ADS"
     @search="search"
+    @short="short"
   ></MainShort>
 
   <div v-else>
