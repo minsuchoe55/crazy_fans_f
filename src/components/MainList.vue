@@ -133,7 +133,10 @@ const video = computed(() => {
   let start = (currentPage.value - 1) * perPage;
   let end = start + perPage;
 
-  return props.VIDEO?.slice(start, end);
+  return props.VIDEO?.filter((video) => {
+    // TODO: 쇼츠 구분
+    return !video.short;
+  }).slice(start, end);
 });
 
 // 감시

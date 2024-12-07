@@ -1,3 +1,5 @@
+<!-- TODO: 플랫폼 구분, 배우 라우터, SEO 태그 -->
+
 <template>
   <router-view></router-view>
 </template>

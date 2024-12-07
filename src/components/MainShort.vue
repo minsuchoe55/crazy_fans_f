@@ -4,6 +4,7 @@
     :modules="[Virtual]"
     virtual
     :direction="'vertical'"
+    @slidesUpdated="slidesUpdated"
     @slideChange="slideChange"
   >
     <swiper-slide
@@ -27,7 +28,7 @@
       >
         <media-provider>
           <div
-            v-if="data.id"
+            v-if="data.id && isControlsVisible"
             @pointerup="
               emit('search', data.user, true);
               emit('short');
@@ -42,16 +43,19 @@
               {{ data.user }}
             </span>
           </div>
-          <div v-else class="overlay-wrapper">
-            <a :href="data.href" target="_blank"
-              ><img
-                :src="`${CDN_URL}/actor/${data.actor}`"
-                class="overlay-actor-thumb"
-              />
-              <span class="overlay-actor-user">
-                {{ data.partner }}
-              </span></a
-            >
+
+          <div
+            v-else-if="!data.id && isControlsVisible"
+            @pointerup="openWindow(data.href)"
+            class="overlay-wrapper"
+          >
+            ><img
+              :src="`${CDN_URL}/ads/${data.thumb}`"
+              class="overlay-actor-thumb"
+            />
+            <span class="overlay-actor-user">
+              {{ data.partner }}
+            </span>
           </div>
         </media-provider>
         <media-video-layout> </media-video-layout>
@@ -63,7 +67,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Virtual } from "swiper/modules";
 import "swiper/css";
@@ -81,6 +85,23 @@ const emit = defineEmits(["search", "short"]);
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
+// 새창열기
+const openWindow = (href) => {
+  window.open(href);
+};
+
+// 컨트롤러
+const isControlsVisible = ref(true);
+const slidesUpdated = () => {
+  const players = document.querySelectorAll("media-player");
+
+  for (let player of players) {
+    player.subscribe(({ controlsVisible }) => {
+      isControlsVisible.value = controlsVisible;
+    });
+  }
+};
+
 // 슬라이드
 const slideChange = async (event) => {
   const players = document.querySelectorAll("media-player");
@@ -90,23 +111,34 @@ const slideChange = async (event) => {
   if (players.length === 2) {
     if (event.previousIndex < event.activeIndex) {
       players[0].pause();
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      players[1].play();
-    } else if (event.previousIndex > event.activeIndex) {
-      players[1].pause();
-      players[0].play();
+      players[1].subscribe(({ canPlay }) => {
+        if (canPlay === true) {
+          players[1].play();
+        }
+      });
     } else {
-      players[0].play();
+      players[1].pause();
+      players[0].subscribe(({ canPlay }) => {
+        if (canPlay === true) {
+          players[0].play();
+        }
+      });
     }
   } else {
     if (event.previousIndex < event.activeIndex) {
       players[1].pause();
-      players[2].play();
-    } else if (event.previousIndex > event.activeIndex) {
-      players[1].pause();
-      players[0].play();
+      players[2].subscribe(({ canPlay }) => {
+        if (canPlay === true) {
+          players[2].play();
+        }
+      });
     } else {
-      players[1].play();
+      players[1].pause();
+      players[0].subscribe(({ canPlay }) => {
+        if (canPlay === true) {
+          players[0].play();
+        }
+      });
     }
   }
 
@@ -131,19 +163,30 @@ const slideChange = async (event) => {
   }
 };
 
+// 광고
+const ads = computed(() => {
+  return props.ADS.filter((ads) => {
+    return ads.expire > new Date().toISOString();
+  });
+});
+
 // 비디오
 const video = computed(() => {
   return props.VIDEO.reduce((acc, data, index) => {
+    // TODO: 쇼츠 구분
+    // if (data.short === true) {
     acc.push(data);
+    // }
 
     // 광고 삽입
     if (index > 0 && index % 9 === 0) {
-      const random = Math.floor(Math.random() * props.ADS.length);
+      const random = Math.floor(Math.random() * ads.value.length);
 
       acc.push({
-        partner: props.ADS[random].partner,
-        video: props.ADS[random].video,
-        href: props.ADS[random].href,
+        partner: ads.value[random].partner,
+        thumb: ads.value[random].thumb,
+        video: ads.value[random].video,
+        href: ads.value[random].href,
       });
     }
 
