@@ -1,5 +1,3 @@
-<!-- TODO: 환경 변수, SEO 태그, 플랫폼 구분 -->
-
 <template>
   <router-view></router-view>
 </template>

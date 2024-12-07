@@ -14,6 +14,7 @@
     >
       <!-- 플레이어 -->
       <media-player
+        @contextmenu.prevent
         load="eager"
         view-type="video"
         stream-type="on-demand"
@@ -49,7 +50,7 @@
             @pointerup="openWindow(data.href)"
             class="overlay-wrapper"
           >
-            ><img
+            <img
               :src="`${CDN_URL}/ads/${data.thumb}`"
               class="overlay-actor-thumb"
             />

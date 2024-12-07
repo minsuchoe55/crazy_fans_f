@@ -1,6 +1,7 @@
 <template>
   <!-- 플레이어 -->
   <media-player
+    @contextmenu.prevent
     view-type="video"
     stream-type="on-demand"
     :src="ads"
