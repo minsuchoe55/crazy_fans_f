@@ -134,8 +134,9 @@ const video = computed(() => {
   let end = start + perPage;
 
   return props.VIDEO?.filter((video) => {
-    // TODO: 쇼츠 구분
     return !video.short;
+    // TODO
+    // return video.short === false;
   }).slice(start, end);
 });
 

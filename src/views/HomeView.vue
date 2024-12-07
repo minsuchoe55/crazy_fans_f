@@ -28,6 +28,11 @@ import MainList from "@/components/MainList.vue";
 import MainFooter from "@/components/MainFooter.vue";
 import MainShort from "@/components/MainShort.vue";
 
+// 프롭스
+const props = defineProps({
+  actor: String,
+});
+
 // JSON
 const VIDEO = ref(null);
 const VIDEO_BACKUP = ref(null);
@@ -88,6 +93,11 @@ const short = () => {
     VIDEO.value = [];
     ACTOR.value = [];
     ADS.value = [];
+  }
+
+  // 라우터
+  if (props.actor) {
+    search(props.actor, true);
   }
 })();
 </script>

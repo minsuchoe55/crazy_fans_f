@@ -173,10 +173,11 @@ const ads = computed(() => {
 // 비디오
 const video = computed(() => {
   return props.VIDEO.reduce((acc, data, index) => {
-    // TODO: 쇼츠 구분
-    // if (data.short === true) {
-    acc.push(data);
-    // }
+    if (!data.short) {
+      // TODO
+      // if (data.short === true) {
+      acc.push(data);
+    }
 
     // 광고 삽입
     if (index > 0 && index % 9 === 0) {
