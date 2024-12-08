@@ -279,6 +279,7 @@ watch(
 .pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 48px 0px 48px 0px; /* 결과와 맞춤 */
 }
 .pagination-button {
