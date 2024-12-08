@@ -43,6 +43,7 @@
           @click="
             emit('search', data.user, true);
             emit('short');
+            searchOpen();
           "
           v-for="(data, index) in actor"
           :key="index"
