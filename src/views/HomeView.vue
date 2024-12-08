@@ -12,7 +12,7 @@
       :selectActor="selectActor"
       @search="search"
     ></MainSlider>
-    <MainList :VIDEO="VIDEO" @search="search" :ADS="ADS"></MainList>
+    <MainList :VIDEO="VIDEO" :ADS="ADS" @search="search"></MainList>
     <MainFooter></MainFooter>
   </div>
 

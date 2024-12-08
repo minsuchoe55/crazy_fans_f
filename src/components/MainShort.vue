@@ -32,7 +32,7 @@
             v-if="data.id && isControlsVisible"
             @pointerup="
               emit('search', data.user, true);
-              emit('short');
+              props.shortState && emit('shortButton');
             "
             class="overlay-wrapper"
           >
@@ -78,10 +78,11 @@ import "vidstack/bundle";
 const props = defineProps({
   VIDEO: Object,
   ADS: Object,
+  shortState: Boolean,
 });
 
 // 이벤트
-const emit = defineEmits(["search", "short"]);
+const emit = defineEmits(["search", "shortButton"]);
 
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -89,18 +90,6 @@ const CDN_URL = import.meta.env.VITE_CDN_URL;
 // 새창
 const fresh = (href) => {
   window.open(href);
-};
-
-// 컨트롤러
-const isControlsVisible = ref(true);
-const slidesUpdated = () => {
-  const players = document.querySelectorAll("media-player");
-
-  for (let player of players) {
-    player.subscribe(({ controlsVisible }) => {
-      isControlsVisible.value = controlsVisible;
-    });
-  }
 };
 
 // 슬라이드
@@ -190,6 +179,18 @@ const video = computed(() => {
 });
 
 // 기타
+const isControlsVisible = ref(true);
+const slidesUpdated = () => {
+  const players = document.querySelectorAll("media-player");
+
+  // 오버레이 숨겨질 때 커스텀 오버레이도 숨겨지게 변경
+  for (let player of players) {
+    player.subscribe(({ controlsVisible }) => {
+      isControlsVisible.value = controlsVisible;
+    });
+  }
+};
+
 document.documentElement.style.setProperty(
   // 100vh의 기준을 innerHeight으로 변경
   "--vh",

@@ -38,7 +38,7 @@ const ads = computed(() => {
   }`;
 });
 
-// 초기화
+// 재생
 const play = () => {
   const player = document.querySelector("media-player");
   const button = document.querySelector("media-play-button");
@@ -78,6 +78,7 @@ const play = () => {
   });
 };
 
+// 라이프사이클
 onMounted(() => {
   play();
 });
