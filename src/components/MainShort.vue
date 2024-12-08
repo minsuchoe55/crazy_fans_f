@@ -30,7 +30,7 @@
         <media-provider>
           <!-- 직접 선택 -->
           <div
-            v-if="data.id && isControlsVisible"
+            v-show="data.id && isControlsVisible"
             @pointerup="
               emit('search', data.user, true);
               props.shortState && emit('shortButton');
@@ -47,7 +47,7 @@
           </div>
 
           <div
-            v-else-if="!data.id && isControlsVisible"
+            v-eles-show="!data.id && isControlsVisible"
             @pointerup="fresh(data.href)"
             class="overlay-wrapper"
           >
