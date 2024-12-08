@@ -14,13 +14,13 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import "vidstack/bundle";
 
 // 프롭스
 const props = defineProps({
   video: Object,
-  ADS: Object,
+  ads: Object,
 });
 
 // 글로벌
@@ -34,12 +34,12 @@ const video = computed(() => {
 // 광고
 const ads = computed(() => {
   return `${CDN_URL}/ads/${
-    props.ADS[Math.floor(Math.random() * props.ADS.length)].video
+    props.ads[Math.floor(Math.random() * props.ads.length)].video
   }`;
 });
 
 // 초기화
-(() => {
+const play = () => {
   const player = document.querySelector("media-player");
   const button = document.querySelector("media-play-button");
   const slider = document.querySelector("media-time-slider");
@@ -76,7 +76,11 @@ const ads = computed(() => {
       player.src = `${CDN_URL}/video/${video.value}`;
     }
   });
-})();
+};
+
+onMounted(() => {
+  play();
+});
 </script>
 
 <style scoped></style>

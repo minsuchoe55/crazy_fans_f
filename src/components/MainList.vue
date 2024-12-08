@@ -12,12 +12,13 @@
         </div>
         <!-- 썸네일 -->
 
-        <!-- 비디오 -->
-        <MainVideo v-else :video="data" :ADS="props.ADS"></MainVideo>
-        <!-- 비디오 -->
+        <!-- 플레이어 -->
+        <MainVideo v-else :video="data" :ads="ads"></MainVideo>
+        <!-- 플레이어 -->
 
         <!-- 데이터 -->
         <div class="meta-wrapper">
+          <!-- 직접 선택 -->
           <img
             @click="emit('search', data.user, true)"
             :src="`${CDN_URL}/actor/${data.actor}`"
@@ -90,8 +91,30 @@ const emit = defineEmits(["search"]);
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
+// 비디오
+const video = computed(() => {
+  let start = (currentPage.value - 1) * perPage;
+  let end = start + perPage;
+
+  return props.VIDEO?.filter((video) => {
+    return !video.short;
+    // TODO
+    // return video.short === false;
+  }).slice(start, end);
+});
+
+// 광고
+const ads = computed(() => {
+  return props.ADS.filter((ads) => {
+    return ads.expire > new Date().toISOString();
+  });
+});
+
+// 선택
+const selectVideo = ref(null);
+
 // 페이지
-const perPage = 16;
+const perPage = 20;
 const currentPage = ref(1);
 const totalPage = computed(() => {
   return Math.ceil(props.VIDEO.length / perPage);
@@ -112,13 +135,16 @@ const pages = computed(() => {
 
   return pages;
 });
-const scrollTo = (param) => {
-  if (param === "-") {
+
+// 기타
+const scrollTo = (page) => {
+  // 페이지 이동 시 스크롤 초기화
+  if (page === "-") {
     currentPage.value -= 1;
-  } else if (param === "+") {
+  } else if (page === "+") {
     currentPage.value += 1;
   } else {
-    currentPage.value = param;
+    currentPage.value = page;
   }
 
   window.scrollTo({
@@ -127,22 +153,9 @@ const scrollTo = (param) => {
   });
 };
 
-// 비디오
-const selectVideo = ref(null);
-const video = computed(() => {
-  let start = (currentPage.value - 1) * perPage;
-  let end = start + perPage;
-
-  return props.VIDEO?.filter((video) => {
-    return !video.short;
-    // TODO
-    // return video.short === false;
-  }).slice(start, end);
-});
-
-// 기타
+// 감시
 watch(
-  // 비디오 변경 감시
+  // 비디오 변경 시 페이지 초기화
   () => props.VIDEO,
   () => {
     currentPage.value = 1;
@@ -159,7 +172,7 @@ watch(
   gap: 8px;
 }
 
-/* 비디오 */
+/* 썸네일 */
 .grid-wrapper {
   border-radius: 8px;
   background-color: var(--sub-background-color);
@@ -307,7 +320,7 @@ watch(
   }
 }
 
-/* 결과 */
+/* 비디오 없음 */
 .no-search {
   text-align: center;
   color: var(--third-font-color);

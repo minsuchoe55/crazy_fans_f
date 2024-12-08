@@ -6,6 +6,7 @@
     :slidesPerView="slidesPerView"
     :space-between="4"
   >
+    <!-- 직접 선택 -->
     <swiper-slide
       @click="emit('search', data.user, true)"
       v-for="(data, index) in actor"
