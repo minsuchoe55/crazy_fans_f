@@ -48,8 +48,10 @@ const ADS = ref(null);
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
-// 검색
+// 선택
 const selectActor = ref("전체 보기");
+
+// 검색
 const search = (keyword, isActor) => {
   // 검색어 있음
   if (keyword && keyword !== "전체 보기") {

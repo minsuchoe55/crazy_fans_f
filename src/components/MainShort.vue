@@ -4,8 +4,8 @@
     :modules="[Virtual]"
     virtual
     :direction="'vertical'"
-    @slidesUpdated="slidesUpdated"
     @slideChange="slideChange"
+    @slidesUpdated="slidesUpdated"
   >
     <swiper-slide
       v-for="(data, index) in video"
@@ -28,6 +28,7 @@
         playsInline
       >
         <media-provider>
+          <!-- 직접 선택 -->
           <div
             v-if="data.id && isControlsVisible"
             @pointerup="
@@ -92,6 +93,31 @@ const fresh = (href) => {
   window.open(href);
 };
 
+// 비디오
+const video = computed(() => {
+  return props.VIDEO.reduce((acc, data, index) => {
+    if (!data.short) {
+      // TODO
+      // if (data.short === true) {
+      acc.push(data);
+    }
+
+    // 광고
+    if (index > 0 && index % 9 === 0) {
+      const random = Math.floor(Math.random() * props.ADS.length);
+
+      acc.push({
+        partner: props.ADS[random].partner,
+        thumb: props.ADS[random].thumb,
+        video: props.ADS[random].video,
+        href: props.ADS[random].href,
+      });
+    }
+
+    return acc;
+  }, []);
+});
+
 // 슬라이드
 const slideChange = (event) => {
   const players = document.querySelectorAll("media-player");
@@ -152,31 +178,6 @@ const slideChange = (event) => {
     });
   }
 };
-
-// 비디오
-const video = computed(() => {
-  return props.VIDEO.reduce((acc, data, index) => {
-    if (!data.short) {
-      // TODO
-      // if (data.short === true) {
-      acc.push(data);
-    }
-
-    // 광고 삽입
-    if (index > 0 && index % 9 === 0) {
-      const random = Math.floor(Math.random() * props.ADS.length);
-
-      acc.push({
-        partner: props.ADS[random].partner,
-        thumb: props.ADS[random].thumb,
-        video: props.ADS[random].video,
-        href: props.ADS[random].href,
-      });
-    }
-
-    return acc;
-  }, []);
-});
 
 // 기타
 const isControlsVisible = ref(true);
