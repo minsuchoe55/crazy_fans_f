@@ -44,7 +44,7 @@ const emit = defineEmits(["search"]);
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
-// 검색
+// 배우
 const actor = computed(() => {
   return props.ACTOR;
 });
@@ -58,6 +58,7 @@ const selectActor = computed(() => {
 const swiperRef = ref(null);
 const slidesPerView = ref(null);
 const resizeObserver = new ResizeObserver((entries) => {
+  // swiper에 width에 맞게 slidesPerView 변경
   for (let entry of entries) {
     slidesPerView.value = entry.contentRect.width / 54; // 50 + 4
   }

@@ -1,14 +1,12 @@
 <template>
-  <MainHeader :ACTOR="ACTOR" @search="search" @short="short"></MainHeader>
-
-  <MainShort
-    v-if="isShort"
-    :VIDEO="VIDEO"
-    :ADS="ADS"
+  <MainHeader
+    :ACTOR="ACTOR"
     @search="search"
-  ></MainShort>
+    :shortState="shortState"
+    @shortButton="shortButton"
+  ></MainHeader>
 
-  <div v-else>
+  <div v-if="!shortState">
     <MainSlider
       :ACTOR="ACTOR"
       :selectActor="selectActor"
@@ -17,6 +15,15 @@
     <MainList :VIDEO="VIDEO" :ADS="ADS" @search="search"></MainList>
     <MainFooter></MainFooter>
   </div>
+
+  <MainShort
+    v-else
+    :VIDEO="VIDEO_BACKUP"
+    :ADS="ADS"
+    @search="search"
+    :shortState="shortState"
+    @shortButton="shortButton"
+  ></MainShort>
 </template>
 
 <script setup>
@@ -71,9 +78,9 @@ const search = (keyword, isActor) => {
 };
 
 // 쇼츠
-const isShort = ref(false);
-const short = () => {
-  isShort.value = !isShort.value;
+const shortState = ref(false);
+const shortButton = () => {
+  shortState.value = !shortState.value;
 };
 
 // 초기화

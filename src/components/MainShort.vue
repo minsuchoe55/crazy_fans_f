@@ -30,7 +30,10 @@
         <media-provider>
           <div
             v-if="data.id && isControlsVisible"
-            @pointerup="emit('search', data.user, true)"
+            @pointerup="
+              emit('search', data.user, true);
+              emit('short');
+            "
             class="overlay-wrapper"
           >
             <img
@@ -44,7 +47,7 @@
 
           <div
             v-else-if="!data.id && isControlsVisible"
-            @pointerup="openWindow(data.href)"
+            @pointerup="fresh(data.href)"
             class="overlay-wrapper"
           >
             <img
@@ -78,13 +81,13 @@ const props = defineProps({
 });
 
 // 이벤트
-const emit = defineEmits(["search"]);
+const emit = defineEmits(["search", "short"]);
 
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
 // 새창
-const openWindow = (href) => {
+const fresh = (href) => {
   window.open(href);
 };
 
@@ -122,7 +125,7 @@ const slideChange = (event) => {
         }
       });
     }
-  } else {
+  } else if (players.length === 3) {
     if (event.previousIndex < event.activeIndex) {
       players[1].pause();
       players[2].subscribe(({ canPlay }) => {
@@ -161,13 +164,6 @@ const slideChange = (event) => {
   }
 };
 
-// 광고
-const ads = computed(() => {
-  return props.ADS.filter((ads) => {
-    return ads.expire > new Date().toISOString();
-  });
-});
-
 // 비디오
 const video = computed(() => {
   return props.VIDEO.reduce((acc, data, index) => {
@@ -179,13 +175,13 @@ const video = computed(() => {
 
     // 광고 삽입
     if (index > 0 && index % 9 === 0) {
-      const random = Math.floor(Math.random() * ads.value.length);
+      const random = Math.floor(Math.random() * props.ADS.length);
 
       acc.push({
-        partner: ads.value[random].partner,
-        thumb: ads.value[random].thumb,
-        video: ads.value[random].video,
-        href: ads.value[random].href,
+        partner: props.ADS[random].partner,
+        thumb: props.ADS[random].thumb,
+        video: props.ADS[random].video,
+        href: props.ADS[random].href,
       });
     }
 
@@ -195,7 +191,7 @@ const video = computed(() => {
 
 // 기타
 document.documentElement.style.setProperty(
-  // 모바일 100vh 변경
+  // 100vh의 기준을 innerHeight으로 변경
   "--vh",
   `${window.innerHeight * 0.01}px`
 );

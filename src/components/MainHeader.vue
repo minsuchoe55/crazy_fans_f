@@ -4,12 +4,12 @@
     <img @click="refresh()" src="@/assets/logo.png" class="header-logo-icon" />
     <div>
       <img
-        @click="searchOpen()"
+        @click="searchButton()"
         src="@/assets/search.svg"
         class="header-search-icon"
       />
       <img
-        @click="emit('short')"
+        @click="emit('shortButton')"
         src="@/assets/short.svg"
         class="header-short-icon"
       />
@@ -18,31 +18,33 @@
   <!-- 헤더 -->
 
   <!-- 검색 -->
-  <div v-if="isSearchOpen" class="search-container">
+  <div v-if="searchState" class="search-container">
     <!-- 검색 구역 -->
     <div class="search-front-wrapper">
-      <!-- 검색 노출-->
+      <!-- 검색창-->
       <div class="search-input-wrapper">
         <input
-          ref="searchOpenRef"
+          ref="searchRef"
           @keydown="prevent($event)"
           @keyup="search($event.target.value, $event.key)"
           class="search-input"
         />
         <img
-          @click="searchOpen()"
+          @click="searchButton()"
           src="@/assets/close.svg"
           class="search-input-close-icon"
         />
       </div>
-      <!-- 검색 노출 -->
+      <!-- 검색창 -->
 
-      <!-- 결과 노출 -->
+      <!-- 결과창 -->
       <div v-if="actor.length" class="search-result-wrapper">
+        <!-- 직접 선택 -->
         <div
           @click="
             emit('search', data.user, true);
-            searchOpen();
+            props.shortState && emit('shortButton');
+            searchButton();
           "
           v-for="(data, index) in actor"
           :key="index"
@@ -57,12 +59,12 @@
           <span class="search-result-actor-nick">{{ data.nick }}</span>
         </div>
       </div>
-      <!-- 결과 노출 -->
+      <!-- 결과창 -->
     </div>
     <!-- 검색 구역 -->
 
     <!-- 배경 구역 -->
-    <div class="search-back-wrapper" @click="searchOpen()"></div>
+    <div class="search-back-wrapper" @click="searchButton()"></div>
     <!-- 배경 구역 -->
   </div>
   <!-- 검색 -->
@@ -74,10 +76,11 @@ import { ref, computed, nextTick } from "vue";
 // 프롭스
 const props = defineProps({
   ACTOR: Object,
+  shortState: Boolean,
 });
 
 // 이벤트
-const emit = defineEmits(["search", "short"]);
+const emit = defineEmits(["search", "shortButton"]);
 
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -87,17 +90,25 @@ const refresh = () => {
   window.location.href = "/";
 };
 
+// 배우
+const actor = ref(null);
+const actor_backup = computed(() => {
+  return props.ACTOR.filter((data) => {
+    return data.user !== "전체 보기";
+  });
+});
+
 // 검색
-const isSearchOpen = ref(false);
-const searchOpenRef = ref(null);
-const searchOpen = async () => {
-  isSearchOpen.value = !isSearchOpen.value;
+const searchRef = ref(null);
+const searchState = ref(false);
+const searchButton = async () => {
+  searchState.value = !searchState.value;
   actor.value = [];
   selectIndex.value = -1;
 
-  if (isSearchOpen.value) {
+  if (searchState.value) {
     await nextTick();
-    searchOpenRef.value.focus(); // 포커스 이동
+    searchRef.value.focus(); // 포커스 이동
 
     document.body.style.overflow = "hidden"; // 배경 스크롤 방지(데스크탑)
     document.body.style.touchAction = "none"; // 배경 스크롤 방지(모바일)
@@ -108,12 +119,6 @@ const searchOpen = async () => {
 };
 
 // 검색
-const actor = ref(null);
-const actor_backup = computed(() => {
-  return props.ACTOR.filter((data) => {
-    return data.user !== "전체 보기";
-  });
-});
 const search = (keyword, key) => {
   // 검색어 있음
   if (keyword) {
@@ -130,12 +135,12 @@ const search = (keyword, key) => {
   }
 };
 
-// 선택
+// 간접 선택
 const selectIndex = ref(-1);
 const select = (keyword, key) => {
   // ESC
   if (key === "Escape") {
-    searchOpen();
+    searchButton();
   }
 
   // DOWN
@@ -195,13 +200,14 @@ const select = (keyword, key) => {
       }
     }
 
-    searchOpen();
+    props.shortState && emit("shortButton");
+    searchButton();
   }
 };
 
 // 기타
 const prevent = (event) => {
-  // 포커스 이동 방지
+  // 결과창 상하 이동 시 검색창의 좌우 이동 방지
   if (event.key === "ArrowDown" || event.key === "ArrowUp") {
     event.preventDefault();
   }
