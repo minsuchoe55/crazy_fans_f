@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import "vidstack/bundle";
 
 // 프롭스
@@ -38,8 +38,8 @@ const ads = computed(() => {
   }`;
 });
 
-// 플레이
-const play = () => {
+// 초기화
+(() => {
   const player = document.querySelector("media-player");
   const button = document.querySelector("media-play-button");
   const slider = document.querySelector("media-time-slider");
@@ -76,12 +76,7 @@ const play = () => {
       player.src = `${CDN_URL}/video/${video.value}`;
     }
   });
-};
-
-// 라이프사이클
-onMounted(() => {
-  play();
-});
+})();
 </script>
 
 <style scoped></style>

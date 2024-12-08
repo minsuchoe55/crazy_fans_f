@@ -30,10 +30,7 @@
         <media-provider>
           <div
             v-if="data.id && isControlsVisible"
-            @pointerup="
-              emit('search', data.user, true);
-              emit('short');
-            "
+            @pointerup="emit('search', data.user, true)"
             class="overlay-wrapper"
           >
             <img
@@ -81,12 +78,12 @@ const props = defineProps({
 });
 
 // 이벤트
-const emit = defineEmits(["search", "short"]);
+const emit = defineEmits(["search"]);
 
 // 글로벌
 const CDN_URL = import.meta.env.VITE_CDN_URL;
 
-// 새창열기
+// 새창
 const openWindow = (href) => {
   window.open(href);
 };
@@ -104,7 +101,7 @@ const slidesUpdated = () => {
 };
 
 // 슬라이드
-const slideChange = async (event) => {
+const slideChange = (event) => {
   const players = document.querySelectorAll("media-player");
   const sliders = document.querySelectorAll("media-time-slider");
 
@@ -198,6 +195,7 @@ const video = computed(() => {
 
 // 기타
 document.documentElement.style.setProperty(
+  // 모바일 100vh 변경
   "--vh",
   `${window.innerHeight * 0.01}px`
 );

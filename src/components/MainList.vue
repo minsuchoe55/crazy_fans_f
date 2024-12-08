@@ -140,8 +140,9 @@ const video = computed(() => {
   }).slice(start, end);
 });
 
-// 감시
+// 기타
 watch(
+  // 비디오 변경 감시
   () => props.VIDEO,
   () => {
     currentPage.value = 1;

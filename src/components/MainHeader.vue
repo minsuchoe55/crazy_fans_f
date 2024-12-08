@@ -42,7 +42,6 @@
         <div
           @click="
             emit('search', data.user, true);
-            emit('short');
             searchOpen();
           "
           v-for="(data, index) in actor"
@@ -181,7 +180,6 @@ const select = (keyword, key) => {
     // 선택 있음
     if (selectIndex.value > -1) {
       emit("search", actor.value[selectIndex.value].user, true);
-      emit("short");
     }
 
     // 선택 없음
@@ -189,13 +187,11 @@ const select = (keyword, key) => {
       // 1명
       if (actor.value.length === 1) {
         emit("search", actor.value[selectIndex.value].user, true);
-        emit("short");
       }
 
       // 1명 초과
       else {
         emit("search", keyword, false);
-        emit("short");
       }
     }
 
