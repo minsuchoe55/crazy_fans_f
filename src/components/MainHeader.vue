@@ -18,7 +18,7 @@
   <!-- 헤더 -->
 
   <!-- 검색 -->
-  <div v-show="searchState" class="search-container">
+  <div v-if="searchState" class="search-container">
     <!-- 검색 구역 -->
     <div class="search-front-wrapper">
       <!-- 검색창-->
@@ -38,13 +38,14 @@
       <!-- 검색창 -->
 
       <!-- 결과창 -->
-      <div v-show="actor.length" class="search-result-wrapper">
+      <div v-if="actor.length" class="search-result-wrapper">
         <!-- 직접 선택 -->
         <div
           @click="
             emit('search', data.user, true);
             props.shortState && emit('shortButton');
             searchButton();
+            ㅍ;
           "
           v-for="(data, index) in actor"
           :key="index"

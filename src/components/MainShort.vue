@@ -28,36 +28,34 @@
         playsInline
       >
         <media-provider>
-          <!-- 직접 선택 -->
-          <div
-            v-show="data.id && isControlsVisible"
-            @pointerup="
-              emit('search', data.user, true);
-              props.shortState && emit('shortButton');
-            "
-            class="overlay-wrapper"
-          >
-            <img
-              :src="`${CDN_URL}/actor/${data.actor}`"
-              class="overlay-actor-thumb"
-            />
-            <span class="overlay-actor-user">
-              {{ data.user }}
-            </span>
-          </div>
+          <div v-if="isControlsVisible">
+            <!-- 직접 선택 -->
+            <div
+              v-if="data.id"
+              @pointerup="
+                emit('search', data.user, true);
+                props.shortState && emit('shortButton');
+              "
+              class="overlay-wrapper"
+            >
+              <img
+                :src="`${CDN_URL}/actor/${data.actor}`"
+                class="overlay-actor-thumb"
+              />
+              <span class="overlay-actor-user">
+                {{ data.user }}
+              </span>
+            </div>
 
-          <div
-            v-eles-show="!data.id && isControlsVisible"
-            @pointerup="fresh(data.href)"
-            class="overlay-wrapper"
-          >
-            <img
-              :src="`${CDN_URL}/ads/${data.thumb}`"
-              class="overlay-actor-thumb"
-            />
-            <span class="overlay-actor-user">
-              {{ data.partner }}
-            </span>
+            <div v-else @pointerup="fresh(data.href)" class="overlay-wrapper">
+              <img
+                :src="`${CDN_URL}/ads/${data.thumb}`"
+                class="overlay-actor-thumb"
+              />
+              <span class="overlay-actor-user">
+                {{ data.partner }}
+              </span>
+            </div>
           </div>
         </media-provider>
         <media-video-layout> </media-video-layout>
