@@ -94,9 +94,7 @@ const fresh = (href) => {
 // 비디오
 const video = computed(() => {
   return props.VIDEO.reduce((acc, data, index) => {
-    if (!data.short) {
-      // TODO
-      // if (data.short === true) {
+    if (data.short === true) {
       acc.push(data);
     }
 

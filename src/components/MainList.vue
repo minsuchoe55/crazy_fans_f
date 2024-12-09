@@ -26,13 +26,15 @@
           />
           <div class="meta-data">
             <div class="meta-user">{{ data.user }}</div>
-            <div>
+            <div class="meta-sub-data">
               <span class="meta-nick">{{ data.nick }}</span>
-              <span class="meta-hash">{{ data.hash }}</span>
-            </div>
-            <div>
-              <span class="meta-date">{{ data.date.split("T")[0] }}</span>
+              <span v-if="data.hash !== 'undefined'" class="meta-hash">{{
+                data.hash
+              }}</span>
               <span class="meta-time">{{ data.time }}</span>
+            </div>
+            <div v-if="data.disc !== 'undefined'" class="meta-date">
+              {{ data.disc.replace(/<[^>]*>/g, "") }}
             </div>
           </div>
         </div>
@@ -97,9 +99,7 @@ const video = computed(() => {
   let end = start + perPage;
 
   return props.VIDEO?.filter((video) => {
-    return !video.short;
-    // TODO
-    // return video.short === false;
+    return video.short === false;
   }).slice(start, end);
 });
 
@@ -245,35 +245,24 @@ watch(
   line-height: 1; /* 높이 고정 */
   padding: 2px 0px 2px 0px;
   box-sizing: border-box; /* 썸네일과 맞춤 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .meta-user {
   color: var(--first-font-color);
   font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.meta-nick {
-  display: inline-block;
-  color: var(--second-font-color);
-  font-size: 12px;
-  margin-right: 8px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.meta-sub-data {
+  display: flex;
 }
+.meta-nick,
 .meta-hash {
-  display: inline-block;
   color: var(--second-font-color);
-  font-size: 12px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.meta-date {
-  display: inline-block;
-  color: var(--third-font-color);
   font-size: 12px;
   margin-right: 8px;
   overflow: hidden;
@@ -281,9 +270,16 @@ watch(
   text-overflow: ellipsis;
 }
 .meta-time {
-  display: inline-block;
+  color: var(--second-font-color);
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.meta-date {
   color: var(--third-font-color);
   font-size: 12px;
+  margin-top: 4px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

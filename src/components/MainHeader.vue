@@ -45,7 +45,6 @@
             emit('search', data.user, true);
             props.shortState && emit('shortButton');
             searchButton();
-            ㅍ;
           "
           v-for="(data, index) in actor"
           :key="index"
