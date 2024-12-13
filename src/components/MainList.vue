@@ -117,7 +117,7 @@ const selectVideo = ref(null);
 const perPage = 20;
 const currentPage = ref(1);
 const totalPage = computed(() => {
-  return Math.ceil(props.VIDEO.length / perPage);
+  return Math.ceil(video.value.length / perPage);
 });
 const pages = computed(() => {
   // 5개 노출
