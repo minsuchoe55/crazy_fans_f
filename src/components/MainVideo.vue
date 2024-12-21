@@ -2,6 +2,7 @@
   <!-- 플레이어 -->
   <media-player
     @contextmenu.prevent
+    fullscreen-orientation="none"
     view-type="video"
     stream-type="on-demand"
     :src="ads"

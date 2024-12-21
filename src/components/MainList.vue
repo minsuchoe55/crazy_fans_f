@@ -45,14 +45,20 @@
     <!-- 페이지 -->
     <div class="pagination">
       <div
-        @click="scrollTo('-')"
+        @click="
+          scrollTo('-');
+          pushState();
+        "
         class="pagination-button"
         :class="{ disable: currentPage === 1 }"
       >
         이전
       </div>
       <div
-        @click="scrollTo(page)"
+        @click="
+          scrollTo(page);
+          pushState();
+        "
         v-for="page in pages"
         :key="page"
         class="pagination-button"
@@ -61,7 +67,10 @@
         {{ page }}
       </div>
       <div
-        @click="scrollTo('+')"
+        @click="
+          scrollTo('+');
+          pushState();
+        "
         class="pagination-button"
         :class="{ disable: currentPage === totalPage }"
       >
@@ -78,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import MainVideo from "@/components/MainVideo.vue";
 
 // 프롭스
@@ -98,9 +107,11 @@ const video = computed(() => {
   let start = (currentPage.value - 1) * perPage;
   let end = start + perPage;
 
-  return props.VIDEO?.filter((video) => {
-    return video.short === false;
-  }).slice(start, end);
+  return props.VIDEO?.slice(start, end);
+
+  // return props.VIDEO?.filter((video) => {
+  //   return video.short === false;
+  // }).slice(start, end);
 });
 
 // 광고
@@ -117,7 +128,7 @@ const selectVideo = ref(null);
 const perPage = 20;
 const currentPage = ref(1);
 const totalPage = computed(() => {
-  return Math.ceil(video.value.length / perPage);
+  return Math.ceil(props.VIDEO.length / perPage);
 });
 const pages = computed(() => {
   // 5개 노출
@@ -161,6 +172,21 @@ watch(
     currentPage.value = 1;
   }
 );
+
+// 뒤로가기
+const pushState = () => {
+  window.history.pushState({ page: currentPage.value }, null, location.href);
+};
+
+onMounted(() => {
+  window.onpopstate = (event) => {
+    if (event.state.page) {
+      currentPage.value = event.state.page;
+    } else {
+      currentPage.value = 1;
+    }
+  };
+});
 </script>
 
 <style scoped>

@@ -15,6 +15,7 @@
       <!-- 플레이어 -->
       <media-player
         @contextmenu.prevent
+        fullscreen-orientation="none"
         load="eager"
         view-type="video"
         stream-type="on-demand"
@@ -67,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Virtual } from "swiper/modules";
 import "swiper/css";
@@ -193,6 +194,15 @@ document.documentElement.style.setProperty(
   "--vh",
   `${window.innerHeight * 0.01}px`
 );
+
+// 뒤로가기
+onMounted(() => {
+  window.history.pushState(null, null, location.href);
+
+  window.onpopstate = () => {
+    props.shortState && emit("shortButton");
+  };
+});
 </script>
 
 <style scoped>
