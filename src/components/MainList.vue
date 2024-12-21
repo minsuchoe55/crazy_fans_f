@@ -107,11 +107,9 @@ const video = computed(() => {
   let start = (currentPage.value - 1) * perPage;
   let end = start + perPage;
 
-  return props.VIDEO?.slice(start, end);
-
-  // return props.VIDEO?.filter((video) => {
-  //   return video.short === false;
-  // }).slice(start, end);
+  return props.VIDEO?.filter((video) => {
+    return video.short === false;
+  }).slice(start, end);
 });
 
 // 광고
@@ -158,10 +156,7 @@ const scrollTo = (page) => {
     currentPage.value = page;
   }
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  document.documentElement.scrollTop = 0;
 };
 
 // 감시

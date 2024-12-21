@@ -5,6 +5,10 @@
 <script setup></script>
 
 <style>
+html {
+  scroll-behavior: smooth;
+}
+
 /* 변수 */
 :root {
   --main-background-color: rgba(0, 0, 0, 0.9);
