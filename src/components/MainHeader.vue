@@ -102,6 +102,12 @@ const actor_backup = computed(() => {
 const searchRef = ref(null);
 const searchState = ref(false);
 const searchButton = async () => {
+  // 비디오 변경 시 비디오 초기화
+  const players = document.querySelectorAll("media-player");
+  for (let player of players) {
+    player.pause();
+  }
+
   searchState.value = !searchState.value;
   actor.value = [];
   selectIndex.value = -1;

@@ -170,10 +170,12 @@ const scrollTo = (page) => {
 
 // 감시
 watch(
-  // 비디오 변경 시 페이지 초기화
   () => props.VIDEO,
   () => {
+    // 비디오 변경 시 페이지 초기화
     currentPage.value = 1;
+    // 비디오 변경 시 비디오 초기화
+    selectVideo.value = null;
   }
 );
 
