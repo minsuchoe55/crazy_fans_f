@@ -103,7 +103,7 @@ const video = computed(() => {
     }
 
     // 광고
-    if (acc.length === 10 || (acc.length !== 11 && acc.length % 11 === 0)) {
+    if (acc.length === 10 || (acc.length > 11 && acc.length % 11 === 0)) {
       const random = Math.floor(Math.random() * props.ADS.length);
 
       acc.push({
@@ -163,7 +163,7 @@ const slideChange = (event) => {
   // 광고
   if (
     event.activeIndex === 10 ||
-    (event.activeIndex !== 11 && event.activeIndex % 11 === 0)
+    (event.activeIndex > 11 && event.activeIndex % 11 === 0)
   ) {
     // 광고 재생 시 슬라이드 고정
     event.allowTouchMove = false;
