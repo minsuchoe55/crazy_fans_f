@@ -94,13 +94,13 @@ const fresh = (href) => {
 
 // 비디오
 const video = computed(() => {
-  return props.VIDEO.reduce((acc, data, index) => {
+  return props.VIDEO.reduce((acc, data) => {
     if (data.short === true) {
       acc.push(data);
     }
 
     // 광고
-    if (index > 0 && index % 9 === 0) {
+    if (acc.length === 10 || (acc.length !== 11 && acc.length % 11 === 0)) {
       const random = Math.floor(Math.random() * props.ADS.length);
 
       acc.push({
@@ -119,6 +119,8 @@ const video = computed(() => {
 const slideChange = (event) => {
   const players = document.querySelectorAll("media-player");
   const sliders = document.querySelectorAll("media-time-slider");
+
+  console.log(event.activeIndex);
 
   // 재생
   if (players.length === 2) {
@@ -156,7 +158,10 @@ const slideChange = (event) => {
   }
 
   // 광고
-  if (event.activeIndex > 0 && event.activeIndex % 10 === 0) {
+  if (
+    event.activeIndex === 10 ||
+    (event.activeIndex !== 11 && event.activeIndex % 11 === 0)
+  ) {
     // 광고 재생 시 슬라이드 고정
     event.allowTouchMove = false;
     event.allowSlideNext = false;
