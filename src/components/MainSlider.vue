@@ -3,7 +3,6 @@
   <swiper
     :modules="[FreeMode]"
     :free-mode="true"
-    :loop="true"
     :slidesPerView="slidesPerView"
     :space-between="4"
   >

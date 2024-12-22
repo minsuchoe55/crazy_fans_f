@@ -3,7 +3,6 @@
   <swiper
     :modules="[Virtual]"
     virtual
-    :loop="true"
     :direction="'vertical'"
     @slideChange="slideChange"
     @slidesUpdated="slidesUpdated"
