@@ -12,13 +12,13 @@
       :selectActor="selectActor"
       @search="search"
     ></MainSlider>
-    <MainList :VIDEO="VIDEO" :ADS="ADS" @search="search"></MainList>
+    <MainList :VIDEO="VIDEO_FILTER" :ADS="ADS" @search="search"></MainList>
     <MainFooter></MainFooter>
   </div>
 
   <MainShort
     v-else
-    :VIDEO="VIDEO_BACKUP"
+    :VIDEO="VIDEO_ORIGIN"
     :ADS="ADS"
     @search="search"
     :shortState="shortState"
@@ -40,8 +40,8 @@ const props = defineProps({
 });
 
 // JSON
-const VIDEO = ref(null);
-const VIDEO_BACKUP = ref(null);
+const VIDEO_ORIGIN = ref(null);
+const VIDEO_FILTER = ref(null);
 const ACTOR = ref(null);
 const ADS = ref(null);
 
@@ -57,7 +57,7 @@ const search = (keyword, isActor) => {
   if (keyword && keyword !== "전체 보기") {
     // 배우 있음
     if (isActor) {
-      VIDEO.value = [...VIDEO_BACKUP.value].filter((data) => {
+      VIDEO_FILTER.value = [...VIDEO_ORIGIN.value].filter((data) => {
         return data.user === keyword;
       });
       selectActor.value = keyword;
@@ -65,7 +65,7 @@ const search = (keyword, isActor) => {
 
     // 배우 없음
     else {
-      VIDEO.value = [...VIDEO_BACKUP.value].filter((data) => {
+      VIDEO_FILTER.value = [...VIDEO_ORIGIN.value].filter((data) => {
         return data.user.includes(keyword) || data.nick.includes(keyword);
       });
       selectActor.value = null;
@@ -74,7 +74,7 @@ const search = (keyword, isActor) => {
 
   // 검색어 없음
   else {
-    VIDEO.value = [...VIDEO_BACKUP.value];
+    VIDEO_FILTER.value = [...VIDEO_ORIGIN.value];
     selectActor.value = "전체 보기";
   }
 };
@@ -89,8 +89,8 @@ const shortButton = () => {
 (async () => {
   try {
     const videos = await fetch(`${CDN_URL}/json/video.json`);
-    VIDEO.value = await videos.json();
-    VIDEO_BACKUP.value = [...VIDEO.value];
+    VIDEO_ORIGIN.value = await videos.json();
+    VIDEO_FILTER.value = [...VIDEO_ORIGIN.value];
 
     const actors = await fetch(`${CDN_URL}/json/actor.json`);
     ACTOR.value = await actors.json();
@@ -98,7 +98,8 @@ const shortButton = () => {
     const ads = await fetch(`${CDN_URL}/json/ads.json`);
     ADS.value = await ads.json();
   } catch {
-    VIDEO.value = [];
+    VIDEO_ORIGIN.value = [];
+    VIDEO_FILTER.value = [];
     ACTOR.value = [];
     ADS.value = [];
   }

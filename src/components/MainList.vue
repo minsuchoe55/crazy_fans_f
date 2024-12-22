@@ -1,8 +1,12 @@
 <template>
   <!-- 비디오 있음 -->
-  <div v-if="video?.length">
+  <div v-if="video_filter?.length">
     <div class="grid-container">
-      <div v-for="(data, index) in video" :key="index" class="grid-wrapper">
+      <div
+        v-for="(data, index) in video_filter"
+        :key="index"
+        class="grid-wrapper"
+      >
         <!-- 썸네일 -->
         <div v-if="selectVideo !== data.id" class="video-wrapper">
           <img :src="`${CDN_URL}/thumb/${data.thumb}`" class="video-thumb" />
@@ -104,17 +108,22 @@ const CDN_URL = import.meta.env.VITE_CDN_URL;
 
 // 비디오
 const video = computed(() => {
+  return props.VIDEO?.filter((video) => {
+    return video.short === false;
+  });
+});
+
+// 리스트
+const video_filter = computed(() => {
   let start = (currentPage.value - 1) * perPage;
   let end = start + perPage;
 
-  return props.VIDEO?.filter((video) => {
-    return video.short === false;
-  }).slice(start, end);
+  return video.value?.slice(start, end);
 });
 
 // 광고
 const ads = computed(() => {
-  return props.ADS.filter((ads) => {
+  return props.ADS?.filter((ads) => {
     return ads.expire > new Date().toISOString();
   });
 });
@@ -126,7 +135,7 @@ const selectVideo = ref(null);
 const perPage = 20;
 const currentPage = ref(1);
 const totalPage = computed(() => {
-  return Math.ceil(props.VIDEO.length / perPage);
+  return Math.ceil(video.value.length / perPage);
 });
 const pages = computed(() => {
   // 5개 노출
@@ -170,14 +179,17 @@ watch(
 
 // 뒤로가기
 const pushState = () => {
+  // 페이지 이동 시 히스토리 삽입
   window.history.pushState({ page: currentPage.value }, null, location.href);
 };
 
 onMounted(() => {
   window.onpopstate = (event) => {
     if (event.state.page) {
+      // 히스토리 있으면 해당 페이지로 이동
       currentPage.value = event.state.page;
     } else {
+      // 히스토리로 없으면 첫 페이지로 이동
       currentPage.value = 1;
     }
   };

@@ -3,6 +3,7 @@
   <swiper
     :modules="[Virtual]"
     virtual
+    :loop="true"
     :direction="'vertical'"
     @slideChange="slideChange"
     @slidesUpdated="slidesUpdated"
@@ -94,9 +95,12 @@ const fresh = (href) => {
 
 // 비디오
 const video = computed(() => {
-  return props.VIDEO.reduce((acc, data) => {
-    if (data.short === true) {
-      acc.push(data);
+  return props.VIDEO.reduce((acc) => {
+    // 비디오
+    const random = Math.floor(Math.random() * props.VIDEO.length);
+
+    if (props.VIDEO[random].short === true) {
+      acc.push(props.VIDEO[random]);
     }
 
     // 광고
@@ -120,10 +124,9 @@ const slideChange = (event) => {
   const players = document.querySelectorAll("media-player");
   const sliders = document.querySelectorAll("media-time-slider");
 
-  console.log(event.activeIndex);
-
-  // 재생
+  // 비디오
   if (players.length === 2) {
+    // 슬라이드 이동 시 기존 정지 & 신규 재생 : 첫번째 비디오
     if (event.previousIndex < event.activeIndex) {
       players[0].pause();
       players[1].subscribe(({ canPlay }) => {
@@ -140,6 +143,7 @@ const slideChange = (event) => {
       });
     }
   } else if (players.length === 3) {
+    // 슬라이드 이동 시 기존 정지 & 신규 재생 : 첫번째 비디오 외
     if (event.previousIndex < event.activeIndex) {
       players[1].pause();
       players[2].subscribe(({ canPlay }) => {
@@ -202,9 +206,11 @@ document.documentElement.style.setProperty(
 
 // 뒤로가기
 onMounted(() => {
+  // 쇼츠 이동 시 히스토리 삽입
   window.history.pushState(null, null, location.href);
 
   window.onpopstate = () => {
+    // 히스토리 있으면 일반으로 이동
     props.shortState && emit("shortButton");
   };
 });
